@@ -13,99 +13,112 @@ import java.util.Set;
 
 import cz.fi.muni.pa165.enums.AreaType;
 import java.util.Collections;
+import java.util.Objects;
 
 /**
- *   @author Jan Gol <gol.honza@gmail.com>
+ * @author Jan Gol <gol.honza@gmail.com>
  */
 @Entity
 
 public class Area {
-    
-    	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private Long id;
 
-	@NotNull
-	@Column(nullable = false, unique = true)
-	private String name;
-        
-        @Enumerated
-        private AreaType type;
-        
-        @ManyToMany()
-        private Set<Monster> monsters = new HashSet<>();
-        
-        public Area(){
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
+
+    @NotNull
+    @Column(nullable = false, unique = true)
+    private String name;
+
+    @Enumerated
+    private AreaType type;
+
+    @ManyToMany()
+    private Set<Monster> monsters = new HashSet<>();
+
+    public Area() {
+    }
+
+    public Area(String name) {
+        checkName(name);
+        this.name = name;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        checkName(name);
+        this.name = name;
+    }
+
+    public AreaType getType() {
+        return type;
+    }
+
+    public void setType(AreaType type) {
+        this.type = type;
+    }
+
+    public Set<Monster> getMonsters() {
+        return Collections.unmodifiableSet(monsters);
+    }
+
+    public void addMonster(Monster monster) {
+        this.monsters.add(monster);
+        monster.addArea(this);
+    }
+
+    public void removeMonster(Monster monster) {
+        this.monsters.remove(monster);
+        monster.removeArea(this);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 83 * hash + Objects.hashCode(this.getName());
+        hash = 83 * hash + Objects.hashCode(this.getType());
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
         }
-        
-        public Area(String name){
-            checkName(name);
-            this.name = name;
+        if (obj == null) {
+            return false;
         }
-        
-        public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
+        if (!(obj instanceof Area)) {
+            return false;
         }
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		checkName(name);
-		this.name = name;
-	}
-        
-        public AreaType getType() {
-                return type;
+        final Area other = (Area) obj;
+        if (!this.getName().equals(other.getName())) {
+            return false;
         }
-
-        public void setType(AreaType type) {
-                this.type = type;
+        if (this.getType() != other.getType()) {
+            return false;
         }
-        
-        public Set<Monster> getMonsters() {
-                return Collections.unmodifiableSet(monsters);
+        return true;
+    }
+
+    private void checkName(String value) {
+        if (value == null) {
+            throw new IllegalArgumentException("Name can not be null.");
         }
-        
-        public void addMonster(Monster monster) {
-                this.monsters.add(monster);
-                monster.addArea(this);
+        if (value.isEmpty()) {
+            throw new IllegalArgumentException("Name can not be empty.");
         }
-        
-        public void removeMonster(Monster monster) {
-                this.monsters.remove(monster);
-                monster.removeArea(this);
-        }
-        
-        @Override
-	public boolean equals(Object obj) {
-		if (this == obj) return true;
-		if (obj == null || !(obj instanceof Area)) return false;
-
-		Area area = (Area) obj;
-
-		return getName().equals(area.getName());
-                
-	}
-
-	@Override
-	public int hashCode() {
-		int result = getName().hashCode();
-		return result;
-	}
-
-	private void checkName(String value) {
-		if (value == null) {
-			throw new IllegalArgumentException("Name can not be null.");
-		}
-		if (value.isEmpty()) {
-			throw new IllegalArgumentException("Name can not be empty.");
-		}
-	}
+    }
 
 }

@@ -6,10 +6,53 @@ import cz.fi.muni.pa165.enums.AreaType;
 import java.util.List;
 
 public interface AreaDao {
-	void create(Area area);
-	void delete(Area area);
-	Area findById(Long id);
-	Area findByName(String name);
-	List<Area> getAllForType(AreaType areaType);
-	List<Area> getAll();
+
+    /**
+     * Creates area in db.
+     *
+     * @param area that will be created.
+     * @throws IllegalArgumentException when area is null.
+     */
+    void create(Area area);
+
+    /**
+     * Deletes area from db.
+     *
+     * @param area that will be deleted.
+     * @throws IllegalArgumentException when area is null.
+     */
+    void delete(Area area);
+
+    /**
+     * Finds area with given Id and returns corresponding object Area.
+     *
+     * @param id Id of Area
+     * @return Area
+     * @throws IllegalArgumentException when id is null or negative.
+     */
+    Area findById(Long id);
+
+    /**
+     * Finds area with given Name and returns corresponding object Area.
+     *
+     * @param name Name of Area
+     * @return Area
+     * @throws IllegalArgumentException when name is null.
+     */
+    Area findByName(String name);
+
+    /**
+     * Returns List of areas with given type.
+     *
+     * @param areaType AreaType
+     * @return List of Areas
+     */
+    List<Area> getAllForType(AreaType areaType);
+
+    /**
+     * Returns List of ALL areas.
+     *
+     * @return List of Areas.
+     */
+    List<Area> getAll();
 }
