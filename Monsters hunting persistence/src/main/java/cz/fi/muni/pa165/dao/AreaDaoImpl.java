@@ -12,7 +12,6 @@ import static org.assertj.core.util.Preconditions.checkNotNull;
 /**
  * @author Jan Gol <gol.honza@gmail.com>
  */
-
 @Named
 public class AreaDaoImpl implements AreaDao {
 
@@ -42,7 +41,7 @@ public class AreaDaoImpl implements AreaDao {
         if (id == null) {
             throw new IllegalArgumentException("Id cannot be null!");
         }
-        if (id < 0){
+        if (id < 0) {
             throw new IllegalArgumentException("Id cannot be negative!");
         }
         return entityManager.find(Area.class, id);
@@ -52,6 +51,9 @@ public class AreaDaoImpl implements AreaDao {
     public Area findByName(String name) {
         if (name == null) {
             throw new IllegalArgumentException("Name cannot be null!");
+        }
+        if (name.isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be empty.");
         }
         try {
             return entityManager.createQuery("SELECT a FROM Area a WHERE name = :name", Area.class)
@@ -64,6 +66,9 @@ public class AreaDaoImpl implements AreaDao {
 
     @Override
     public List<Area> getAllForType(AreaType areaType) {
+        if (areaType == null) {
+            throw new IllegalArgumentException("areaType cannot be null.");
+        }
         return entityManager.createQuery("SELECT a FROM Area a WHERE type = :areaType", Area.class)
                 .setParameter("areaType", areaType)
                 .getResultList();

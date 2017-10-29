@@ -37,7 +37,7 @@ public interface AreaDao {
      *
      * @param name Name of Area
      * @return Area
-     * @throws IllegalArgumentException when name is null.
+     * @throws IllegalArgumentException when name is null or empty.
      */
     Area findByName(String name);
 
@@ -46,6 +46,7 @@ public interface AreaDao {
      *
      * @param areaType AreaType
      * @return List of Areas
+     * @throws IllegalArgumentException when areaType is null.
      */
     List<Area> getAllForType(AreaType areaType);
 
