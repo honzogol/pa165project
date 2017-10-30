@@ -5,6 +5,10 @@ import cz.fi.muni.pa165.enums.AreaType;
 
 import java.util.List;
 
+/**
+ * @author Jan Gol <gol.honza@gmail.com>
+ */
+
 public interface AreaDao {
 
     /**
