@@ -4,6 +4,7 @@ import cz.fi.muni.pa165.PersistenceApplicationContext;
 import cz.fi.muni.pa165.entity.Monster;
 import cz.fi.muni.pa165.entity.Weapon;
 import cz.fi.muni.pa165.enums.WeaponType;
+import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
@@ -33,7 +34,7 @@ public class WeaponDaoTest extends AbstractTestNGSpringContextTests {
 
 	@Test
 	public void testCreateWithNull() {
-		assertThatExceptionOfType(IllegalArgumentException.class)
+		assertThatExceptionOfType(DataAccessException.class)
 				.isThrownBy(() -> weaponDao.create(null));
 	}
 
@@ -47,7 +48,7 @@ public class WeaponDaoTest extends AbstractTestNGSpringContextTests {
 
 	@Test
 	public void testRemoveWithNull() {
-		assertThatExceptionOfType(IllegalArgumentException.class)
+		assertThatExceptionOfType(DataAccessException.class)
 				.isThrownBy(() -> weaponDao.delete(null));
 	}
 
@@ -63,13 +64,13 @@ public class WeaponDaoTest extends AbstractTestNGSpringContextTests {
 
 	@Test
 	public void testFindByIdWithNull() {
-		assertThatExceptionOfType(IllegalArgumentException.class)
+		assertThatExceptionOfType(DataAccessException.class)
 				.isThrownBy(() -> weaponDao.findById(null));
 	}
 
 	@Test
 	public void testFindByIdNegativeId() {
-		assertThatExceptionOfType(IllegalArgumentException.class)
+		assertThatExceptionOfType(DataAccessException.class)
 				.isThrownBy(() -> weaponDao.findById(-1L));
 	}
 
@@ -90,13 +91,13 @@ public class WeaponDaoTest extends AbstractTestNGSpringContextTests {
 
 	@Test
 	public void testFindByNameWithNull() {
-		assertThatExceptionOfType(IllegalArgumentException.class)
+		assertThatExceptionOfType(DataAccessException.class)
 				.isThrownBy(() -> weaponDao.findByName(null));
 	}
 
 	@Test
 	public void testFindByNameWithEmptyValue() {
-		assertThatExceptionOfType(IllegalArgumentException.class)
+		assertThatExceptionOfType(DataAccessException.class)
 				.isThrownBy(() -> weaponDao.findByName(""));
 	}
 
@@ -117,7 +118,7 @@ public class WeaponDaoTest extends AbstractTestNGSpringContextTests {
 
 	@Test
 	public void testGetAllForTypeWithNull() {
-		assertThatExceptionOfType(IllegalArgumentException.class)
+		assertThatExceptionOfType(DataAccessException.class)
 				.isThrownBy(() -> weaponDao.getAllForType(null));
 	}
 

@@ -15,6 +15,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
+import javax.inject.Named;
 import javax.sql.DataSource;
 
 
@@ -29,7 +30,9 @@ public class PersistenceApplicationContext {
 	 */
 	@Bean
 	public PersistenceExceptionTranslationPostProcessor postProcessor() {
-		return new PersistenceExceptionTranslationPostProcessor();
+		PersistenceExceptionTranslationPostProcessor processor = new PersistenceExceptionTranslationPostProcessor();
+		processor.setRepositoryAnnotationType(Named.class);
+		return processor;
 	}
 
 	@Bean

@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * Implementation of WeaponDao interface
+ * @author Pavel Vyskocil <vyskocilpavel@muni.cz>
  */
 @Named
 public class WeaponDaoImpl implements WeaponDao {

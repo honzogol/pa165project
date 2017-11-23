@@ -4,6 +4,7 @@ import cz.fi.muni.pa165.PersistenceApplicationContext;
 import cz.fi.muni.pa165.entity.Area;
 import cz.fi.muni.pa165.entity.Monster;
 import cz.fi.muni.pa165.enums.AreaType;
+import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
@@ -56,7 +57,7 @@ public class AreaDaoTest extends AbstractTestNGSpringContextTests {
     //Tests for method: Create
     @Test
     public void testCreateAreaWithNull(){
-        assertThatExceptionOfType(IllegalArgumentException.class)
+        assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> areaDao.create(null));
     }
 
@@ -72,7 +73,7 @@ public class AreaDaoTest extends AbstractTestNGSpringContextTests {
     //Tests for method: Delete
     @Test
     public void testDeleteAreaWithNull(){
-        assertThatExceptionOfType(IllegalArgumentException.class)
+        assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> areaDao.delete(null));
     }
 
@@ -89,7 +90,7 @@ public class AreaDaoTest extends AbstractTestNGSpringContextTests {
     //Tests for method: FindById
     @Test
     public void testFindByIdWithNull() {
-        assertThatExceptionOfType(IllegalArgumentException.class)
+        assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> areaDao.findById(null));
     }
 
@@ -104,7 +105,7 @@ public class AreaDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void testFindByIdWithBadId(){
-        assertThatExceptionOfType(IllegalArgumentException.class)
+        assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> areaDao.findById(-1L));
     }
 
@@ -120,13 +121,13 @@ public class AreaDaoTest extends AbstractTestNGSpringContextTests {
     //Tests for method: FindByName
     @Test
     public void testFindByNameWithNull() {
-        assertThatExceptionOfType(IllegalArgumentException.class)
+        assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> areaDao.findByName(null));
     }
 
     @Test
     public void testFindByNameWithEmpty(){
-        assertThatExceptionOfType(IllegalArgumentException.class)
+        assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> areaDao.findByName(""));
     }
 
@@ -166,7 +167,7 @@ public class AreaDaoTest extends AbstractTestNGSpringContextTests {
     //Tests for method: GetAllForType
     @Test
     public void testGetAllForTypeWithNull(){
-        assertThatExceptionOfType(IllegalArgumentException.class)
+        assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> areaDao.getAllForType(null));
     }
 

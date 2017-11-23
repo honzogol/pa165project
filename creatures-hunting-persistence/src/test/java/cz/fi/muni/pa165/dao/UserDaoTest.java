@@ -3,6 +3,7 @@ package cz.fi.muni.pa165.dao;
 import cz.fi.muni.pa165.PersistenceApplicationContext;
 import cz.fi.muni.pa165.entity.User;
 import cz.fi.muni.pa165.enums.UserRole;
+import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
@@ -49,7 +50,7 @@ public class UserDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void testCreateWithNull() {
-        assertThatExceptionOfType(IllegalArgumentException.class)
+        assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> userDao.create(null));
     }
 
@@ -62,7 +63,7 @@ public class UserDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void testDeleteWithNull() {
-        assertThatExceptionOfType(IllegalArgumentException.class)
+        assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> userDao.delete(null));
     }
 
@@ -78,7 +79,7 @@ public class UserDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void testFindByIdWithNull() {
-        assertThatExceptionOfType(IllegalArgumentException.class)
+        assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> userDao.delete(null));
     }
 
@@ -99,19 +100,19 @@ public class UserDaoTest extends AbstractTestNGSpringContextTests {
 
     @Test
     public void testFindByIdNegativeId() {
-        assertThatExceptionOfType(IllegalArgumentException.class)
+        assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> userDao.findById(-1L));
     }
 
     @Test
     public void testFindByEmailWithNull() {
-        assertThatExceptionOfType(IllegalArgumentException.class)
+        assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> userDao.findByEmail(null));
     }
 
     @Test
     public void testFindByEmailWithEmptyValue() {
-        assertThatExceptionOfType(IllegalArgumentException.class)
+        assertThatExceptionOfType(DataAccessException.class)
                 .isThrownBy(() -> userDao.findByEmail(""));
     }
 

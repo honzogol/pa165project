@@ -144,4 +144,17 @@ public class Monster {
 			throw new IllegalArgumentException("Name can not be empty.");
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "Monster{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", areas=" + areas +
+				", appropriateWeapons=" + appropriateWeapons +
+				", weight=" + weight +
+				", height=" + height +
+				", agility=" + agility +
+				'}';
+	}
 }

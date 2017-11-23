@@ -4,6 +4,7 @@ package cz.fi.muni.pa165.dao;
 import cz.fi.muni.pa165.PersistenceApplicationContext;
 import cz.fi.muni.pa165.entity.Monster;
 import cz.fi.muni.pa165.enums.MonsterAgility;
+import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
@@ -36,37 +37,37 @@ public class MonsterDaoTest extends AbstractTestNGSpringContextTests {
 	private Monster monster1;
 	private Monster monster2;
 
-	@Test (expectedExceptions=IllegalArgumentException.class)
+	@Test (expectedExceptions=DataAccessException.class)
 	public void createMonsterWithNullArgumentTest() {
 		monsterDao.create(null);
 	}
 
-	@Test (expectedExceptions=IllegalArgumentException.class)
+	@Test (expectedExceptions=DataAccessException.class)
 	public void deleteMonsterWithNullArgumentTest() {
 		monsterDao.delete(null);
 	}
 
-	@Test (expectedExceptions=IllegalArgumentException.class)
+	@Test (expectedExceptions=DataAccessException.class)
 	public void findByIdWithNullArgumentTest() {
 		monsterDao.findById(null);
 	}
 
-	@Test (expectedExceptions=IllegalArgumentException.class)
+	@Test (expectedExceptions=DataAccessException.class)
 	public void findByIdWithNegativeIdTest() {
 		monsterDao.findById(-1L);
 	}
 
-	@Test (expectedExceptions=IllegalArgumentException.class)
+	@Test (expectedExceptions=DataAccessException.class)
 	public void findByNameWithNullArgumentTest() {
 		monsterDao.findByName(null);
 	}
 
-	@Test (expectedExceptions=IllegalArgumentException.class)
+	@Test (expectedExceptions=DataAccessException.class)
 	public void findByNameWithEmptyNameTest() {
 		monsterDao.findByName("");
 	}
 
-	@Test (expectedExceptions=IllegalArgumentException.class)
+	@Test (expectedExceptions=DataAccessException.class)
 	public void getAllForAgilityWithNullArgumentTest() {
 
 		monsterDao.getAllForAgility(null);
