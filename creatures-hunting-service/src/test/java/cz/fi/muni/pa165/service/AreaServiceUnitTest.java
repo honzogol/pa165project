@@ -54,13 +54,13 @@ public class AreaServiceUnitTest {
 		mountains.setId(2L);
 		district2.setId(3L);
 
-		addMonsterToArea(district.getId(), m1.getId());
-                addMonsterToArea(district.getId(), m2.getId());
+		areaService.addMonsterToArea(district, m1);
+                areaService.addMonsterToArea(district, m2);
 
-		addMonsterToArea(mountains.getId(), m1.getId());
-                addMonsterToArea(mountains.getId(), m2.getId());
+		areaService.addMonsterToArea(mountains, m1);
+                areaService.addMonsterToArea(mountains, m2);
 
-                addMonsterToArea(district2.getId(), m2.getId());
+                areaService.addMonsterToArea(district2, m2);
 	}
 
 	@Test
@@ -118,7 +118,7 @@ public class AreaServiceUnitTest {
 		when(areaDao.getAllForType(AreaType.DISTRICT))
 				.thenReturn(Collections.unmodifiableList(Arrays.asList(district, district2)));
 
-		List<Area> foundAreas = areaService.getAllForAgility(AreaType.DISTRICT);
+		List<Area> foundAreas = areaService.getAllForType(AreaType.DISTRICT);
 
 		assertThat(foundAreas).containsOnly(district, district2);
 	}

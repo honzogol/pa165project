@@ -2,6 +2,7 @@ package cz.fi.muni.pa165.service;
 
 import cz.fi.muni.pa165.dao.AreaDao;
 import cz.fi.muni.pa165.entity.Area;
+import cz.fi.muni.pa165.entity.Monster;
 import cz.fi.muni.pa165.enums.AreaType;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class AreaServiceImpl implements AreaService {
 
     @Override
     public List<Area> getAllAreas() {
-        return areaeDao.getAll();
+        return areaDao.getAll();
     }
 
     @Override
@@ -43,7 +44,7 @@ public class AreaServiceImpl implements AreaService {
             }
         }
         int finalMaxNumOfMonsters = maxNumOfMonsters;
-        return allMonsters.stream()
+        return allAreas.stream()
                 .filter(area -> area.getMonsters().size() == finalMaxNumOfMonsters)
                 .collect(Collectors.toList());
     }
@@ -66,5 +67,16 @@ public class AreaServiceImpl implements AreaService {
     @Override
     public List<Area> getAllForType(AreaType type) {
         return areaDao.getAllForType(type);
+    }
+
+    @Override
+    public void addMonsterToArea(Area area, Monster monster) {
+        if (area.getMonsters().contains(monster)) {
+            throw new IllegalArgumentException(
+                    "Monster is already in this area. monster: "
+                    + monster.getId() + ", area: "
+                    + area.getId());
+        }
+        area.addMonster(monster);
     }
 }

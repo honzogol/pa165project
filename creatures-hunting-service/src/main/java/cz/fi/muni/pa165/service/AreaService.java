@@ -1,7 +1,9 @@
 package cz.fi.muni.pa165.service;
 
 import cz.fi.muni.pa165.entity.Area;
+import cz.fi.muni.pa165.entity.Monster;
 import cz.fi.muni.pa165.enums.AreaType;
+import java.util.List;
 
 /**
  *
@@ -61,4 +63,13 @@ public interface AreaService {
      * @return List of Areas with given type.
      */
     List<Area> getAllForType(AreaType type);
+    
+    /**
+     * Adds Monster to Area
+     * 
+     * @param area to be used.
+     * @param monster To be added.
+     */
+    void addMonsterToArea(Area area, Monster monster);
+    
 }
