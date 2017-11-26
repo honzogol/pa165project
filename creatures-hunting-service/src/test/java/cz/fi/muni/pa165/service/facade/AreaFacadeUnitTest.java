@@ -1,11 +1,14 @@
 package cz.fi.muni.pa165.service.facade;
 
+import cz.fi.muni.pa165.dto.AreaCreateDTO;
 import cz.fi.muni.pa165.dto.AreaDTO;
 import cz.fi.muni.pa165.entity.Area;
 import cz.fi.muni.pa165.entity.Monster;
 import cz.fi.muni.pa165.enums.AreaType;
+import cz.fi.muni.pa165.facade.AreaFacade;
 import cz.fi.muni.pa165.service.BeanMappingService;
 import cz.fi.muni.pa165.service.AreaService;
+import cz.fi.muni.pa165.service.MonsterService;
 import cz.fi.muni.pa165.service.config.ServiceConfiguration;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,151 +36,128 @@ import static org.mockito.Mockito.when;
 public class AreaFacadeUnitTest {
 
     private AreaService areaService = mock(AreaService.class);
+    private MonsterService monsterService = mock(MonsterService.class);
 
     @Inject
     private BeanMappingService beanMappingService;
 
     @InjectMocks
-    private UserFacade userFacade;
+    private AreaFacade areaFacade;
 
-private AreaService areaService;
+    private Area district;
+    private Area mountains;
+    private Area district2;
 
-	private Area district;
-	private Area mountains;
-	private Area district2;
-        
     private AreaDTO districtDTO;
     private AreaDTO district2DTO;
     private AreaDTO mountainsDTO;
+    
+    private AreaCreateDTO districtCreateDTO;
 
     @BeforeMethod
     public void setFacade() {
-        userFacade = new UserFacadeImpl(userService, beanMappingService);
+        areaFacade = new AreaFacadeImpl(areaService, monsterService, beanMappingService);
     }
 
     @BeforeMethod
     public void createEntities() {
-        user1 = new User();
-        user1.setFirstName("Lojzo");
-        user1.setLastName("Hrabovsky");
-        user1.setEmail("email@lojzo.com");
 
-        user2 = new User();
-        user2.setFirstName("Adam");
-        user2.setLastName("Vrtky");
-        user2.setEmail("email@adam.com");
+        Monster m1 = new Monster("Handless Butcher");
+        Monster m2 = new Monster("Kyles Mom");
 
-        user3 = new User();
-        user3.setFirstName("Lucia");
-        user3.setLastName("Mala");
-        user3.setEmail("email@lucia.com");
+        district = new Area("District");
+        mountains = new Area("Mountains");
+        district2 = new Area("Second District");
 
-        userDTO1 = new UserDTO();
-        userDTO1.setFirstName("Lojzo");
-        userDTO1.setLastName("Hrabovsky");
-        userDTO1.setEmail("email@lojzo.com");
+        district.setType(AreaType.DISTRICT);
+        mountains.setType(AreaType.MOUNTAINS);
+        district2.setType(AreaType.DISTRICT);
 
-        userDTO2 = new UserDTO();
-        userDTO2.setFirstName("Adam");
-        userDTO2.setLastName("Vrtky");
-        userDTO2.setEmail("email@adam.com");
+        district.setId(1L);
+        mountains.setId(2L);
+        district2.setId(3L);
 
-        userDTO3 = new UserDTO();
-        userDTO3.setFirstName("Lucia");
-        userDTO3.setLastName("Mala");
-        userDTO3.setEmail("email@lucia.com");
+        areaService.addMonsterToArea(district, m1);
+        areaService.addMonsterToArea(district, m2);
 
-        userAuthDTO1 = new UserAuthenticateDTO();
-        userAuthDTO1.setPassword("0000");
-        userAuthDTO1.setUserId(1L);
+        areaService.addMonsterToArea(mountains, m1);
+        areaService.addMonsterToArea(mountains, m2);
 
-        userAuthDTO2 = new UserAuthenticateDTO();
-        userAuthDTO2.setPassword("1234");
-        userAuthDTO2.setUserId(2L);
+        areaService.addMonsterToArea(district2, m2);
 
-        userAuthDTO3 = new UserAuthenticateDTO();
-        userAuthDTO3.setPassword("1111");
-        userAuthDTO3.setUserId(3L);
+        districtDTO = new AreaDTO();
+        mountainsDTO = new AreaDTO();
+        district2DTO = new AreaDTO();
+
+        districtDTO.setType(AreaType.DISTRICT);
+        mountainsDTO.setType(AreaType.MOUNTAINS);
+        district2DTO.setType(AreaType.DISTRICT);
+
+        districtDTO.setId(1L);
+        mountainsDTO.setId(2L);
+        district2DTO.setId(3L);
+        
+        districtCreateDTO = new AreaCreateDTO();
     }
 
     @Test
-    public void registerUserTest() throws Exception {
-        userFacade.registerUser(userDTO1, "123456789");
+    public void testCreateArea() throws Exception {
+        areaFacade.createArea(districtCreateDTO);
 
-        verify(userService, times(1)).registerUser(user1, "123456789");
+        verify(areaService, times(1)).createArea(district);
     }
 
     @Test
-    public void deleteUserTest() throws Exception {
-        when(userService.findUserById(any(Long.class))).thenReturn(user2);
+    public void testDeleteArea() throws Exception {
+        when(areaService.findById(any(Long.class))).thenReturn(district2);
 
-        userFacade.deleteUser(userDTO2.getId());
+        areaFacade.deleteArea(district2DTO.getId());
 
-        verify(userService, times(1)).deleteUser(user2);
+        verify(areaService, times(1)).deleteArea(district2);
     }
 
     @Test
-    public void getAllUsersTest() throws Exception {
+    public void testGetAllAreas() throws Exception {
 
-        when(userService.getAllUsers()).thenReturn(Arrays.asList(user1, user2, user3));
+        when(areaService.getAllAreas()).thenReturn(Arrays.asList(district, district2, mountains));
 
-        List<UserDTO> allUsers = userFacade.getAllUsers();
-        assertThat(allUsers).containsOnly(userDTO1, userDTO2, userDTO3);
+        List<AreaDTO> allAreas = areaFacade.getAllAreas();
+        assertThat(allAreas).containsOnly(districtDTO, district2DTO, mountainsDTO);
     }
 
     @Test
-    public void FindByIdTest() throws Exception {
-        when(userService.findUserById(any(Long.class))).thenReturn(user1);
+    public void testGetAllForType() throws Exception {
 
-        UserDTO foundUser = userFacade.findUserById(1L);
+        when(areaService.getAllForType(AreaType.DISTRICT)).thenReturn(Arrays.asList(district, district2));
 
-        assertThat(foundUser).isEqualToComparingFieldByField(userDTO1);
+        List<AreaDTO> allForType = areaFacade.getAllForType(AreaType.DISTRICT);
+        assertThat(allForType).containsOnly(districtDTO, district2DTO);
     }
 
     @Test
-    public void FindByEmailTest() throws Exception {
-        when(userService.findUserByEmail("email@lojzo.com")).thenReturn(user1);
+    public void testFindById() throws Exception {
+        when(areaService.findById(any(Long.class))).thenReturn(district);
 
-        UserDTO foundUser = userFacade.findUserByEmail("email@lojzo.com");
+        AreaDTO foundArea = areaFacade.findById(1L);
 
-        assertThat(foundUser).isEqualToComparingFieldByField(userDTO1);
+        assertThat(foundArea).isEqualToComparingFieldByField(districtDTO);
     }
 
     @Test
-    public void authenticateTest() throws Exception {
-        when(userService.authenticate(any(User.class), any(String.class))).thenReturn(true);
+    public void testFindByName() throws Exception {
+        when(areaService.findByName("District")).thenReturn(district);
 
-        boolean answer = userFacade.authenticate(userAuthDTO3);
+        AreaDTO foundArea = areaFacade.findByName("District");
 
-        assertThat(answer).isEqualTo(true);
+        assertThat(foundArea).isEqualToComparingFieldByField(districtDTO);
     }
-
+    
     @Test
-    public void isAdminTest() throws Exception {
-        userDTO1.setRole(UserRole.ADMIN);
-
-        when(userService.isAdmin(any(User.class))).thenReturn(true);
-
-        boolean answer = userFacade.isAdmin(userDTO1);
-
-        assertThat(answer).isEqualTo(true);
-    }
-
-    @Test
-    public void setAdminTest() throws Exception {
-        userFacade.setAdmin(userDTO3);
-
-        verify(userService, times(1)).setAdmin(user3);
-    }
-
-    @Test
-    public void removeAdminTest() throws Exception {
-        userDTO1.setRole(UserRole.ADMIN);
-        user1.setRole(UserRole.ADMIN);
-
-        userFacade.setAdmin(userDTO1);
-
-        verify(userService, times(1)).setAdmin(user1);
+    public void testAddMonsterToArea() throws Exception {
+        
+        
+        
+        
     }
 
 }

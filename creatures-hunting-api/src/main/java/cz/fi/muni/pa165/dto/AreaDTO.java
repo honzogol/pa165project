@@ -44,11 +44,11 @@ public class AreaDTO {
         return monsters;
     }
 
-    public void addAppropriateMonster(MonsterDTO monsterDTO) {
+    public void addMonster(MonsterDTO monsterDTO) {
         monsters.add(monsterDTO);
     }
 
-    public void removeAppropriateMonster(MonsterDTO monsterDTO) {
+    public void removeMonster(MonsterDTO monsterDTO) {
         monsters.remove(monsterDTO);
     }
 

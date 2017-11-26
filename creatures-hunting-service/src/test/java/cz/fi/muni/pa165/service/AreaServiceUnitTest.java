@@ -120,4 +120,9 @@ public class AreaServiceUnitTest {
 
         assertThat(foundAreas).containsOnly(district, district2);
     }
+    
+    @Test
+    public void testAddMonsterToArea(){
+        
+    }
 }
