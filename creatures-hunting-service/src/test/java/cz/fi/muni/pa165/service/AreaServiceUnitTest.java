@@ -23,103 +23,101 @@ import static org.mockito.Mockito.when;
  * @author Jan GOl <gol.honza@gmail.com>
  */
 public class AreaServiceUnitTest {
-    	private AreaDao areaDao = mock(AreaDao.class);
 
-	@InjectMocks
-	private AreaService areaService;
+    private AreaDao areaDao = mock(AreaDao.class);
 
-	private Area district;
-	private Area mountains;
-	private Area district2;
+    @InjectMocks
+    private AreaService areaService;
 
-	@BeforeMethod
-	public void setService() {
-		areaService = new AreaServiceImpl(areaDao);
-	}
+    private Area district;
+    private Area mountains;
+    private Area district2;
 
-	@BeforeMethod
-	public void createEntities() {
-		Monster m1 = new Monster("Handless Butcher");
-		Monster m2 = new Monster("Kyles Mom");
+    @BeforeMethod
+    public void createEntities() {
+        areaService = new AreaServiceImpl(areaDao);
 
-		district = new Area("District");
-		mountains = new Area("Mountains");
-		district2 = new Area("Second District");
+        Monster m1 = new Monster("Handless Butcher");
+        Monster m2 = new Monster("Kyles Mom");
 
-		district.setType(AreaType.DISTRICT);
-		mountains.setType(AreaType.MOUNTAINS);
-		district2.setType(AreaType.DISTRICT);
+        district = new Area("District");
+        mountains = new Area("Mountains");
+        district2 = new Area("Second District");
 
-		district.setId(1L);
-		mountains.setId(2L);
-		district2.setId(3L);
+        district.setType(AreaType.DISTRICT);
+        mountains.setType(AreaType.MOUNTAINS);
+        district2.setType(AreaType.DISTRICT);
 
-		areaService.addMonsterToArea(district, m1);
-                areaService.addMonsterToArea(district, m2);
+        district.setId(1L);
+        mountains.setId(2L);
+        district2.setId(3L);
 
-		areaService.addMonsterToArea(mountains, m1);
-                areaService.addMonsterToArea(mountains, m2);
+        areaService.addMonsterToArea(district, m1);
+        areaService.addMonsterToArea(district, m2);
 
-                areaService.addMonsterToArea(district2, m2);
-	}
+        areaService.addMonsterToArea(mountains, m1);
+        areaService.addMonsterToArea(mountains, m2);
 
-	@Test
-	public void testGetTheMostDangerousAreas() {
-		when(areaDao.getAll()).thenReturn(Arrays.asList(district, mountains, district2));
+        areaService.addMonsterToArea(district2, m2);
+    }
 
-		List<Area> mostDangerousAreas = areaService.getTheMostDangerousAreas();
-		assertThat(mostDangerousAreas).containsOnly(district, mountains);
-	}
+    @Test
+    public void testGetTheMostDangerousAreas() {
+        when(areaDao.getAll()).thenReturn(Arrays.asList(district, mountains, district2));
 
-	@Test
-	public void testGetAllAreas() {
-		when(areaDao.getAll()).thenReturn(Arrays.asList(district, mountains, district2));
+        List<Area> mostDangerousAreas = areaService.getTheMostDangerousAreas();
+        assertThat(mostDangerousAreas).containsOnly(district, mountains);
+    }
 
-		List<Area> allAreas = areaService.getAllAreas();
-		assertThat(allAreas).containsOnly(district, mountains, district2);
-	}
+    @Test
+    public void testGetAllAreas() {
+        when(areaDao.getAll()).thenReturn(Arrays.asList(district, mountains, district2));
 
-	@Test
-	public void testDeleteArea() {
-		when(areaDao.findById(1L)).thenReturn(district);
+        List<Area> allAreas = areaService.getAllAreas();
+        assertThat(allAreas).containsOnly(district, mountains, district2);
+    }
 
-		areaService.deleteArea(district);
+    @Test
+    public void testDeleteArea() {
+        when(areaDao.findById(1L)).thenReturn(district);
 
-		verify(areaDao, times(1)).delete(district);
-	}
+        areaService.deleteArea(district);
 
-	@Test
-	public void testCreateArea() {
-		areaService.createArea(district);
+        verify(areaDao, times(1)).delete(district);
+    }
 
-		verify(areaDao, times(1)).create(district);
-	}
+    @Test
+    public void testCreateArea() {
+        areaService.createArea(district);
 
-	@Test
-	public void testFindById() {
-		when(areaDao.findById(1L)).thenReturn(district);
+        verify(areaDao, times(1)).create(district);
+    }
 
-		Area foundArea = areaService.findById(1L);
+    @Test
+    public void testFindById() {
+        when(areaDao.findById(1L)).thenReturn(district);
 
-		assertThat(foundArea).isEqualToComparingFieldByField(district);
-	}
+        Area foundArea = areaService.findById(1L);
 
-	@Test
-	public void testFindByName() {
-		when(areaDao.findByName("District")).thenReturn(district);
+        assertThat(foundArea).isEqualToComparingFieldByField(district);
+    }
 
-		Area foundArea = areaService.findByName("District");
+    @Test
+    public void testFindByName() {
+        when(areaDao.findByName("District")).thenReturn(district);
 
-		assertThat(foundArea).isEqualToComparingFieldByField(district);
-	}
+        Area foundArea = areaService.findByName("District");
 
-	@Test
-	public void testGetAllForType() {
-		when(areaDao.getAllForType(AreaType.DISTRICT))
-				.thenReturn(Collections.unmodifiableList(Arrays.asList(district, district2)));
+        assertThat(foundArea).isEqualToComparingFieldByField(district);
+    }
 
-		List<Area> foundAreas = areaService.getAllForType(AreaType.DISTRICT);
+    @Test
+    public void testGetAllForType() {
+        when(areaDao.getAllForType(AreaType.DISTRICT))
+                .thenReturn(Collections.unmodifiableList(Arrays.asList(district, district2)));
 
-		assertThat(foundAreas).containsOnly(district, district2);
-	}
+        List<Area> foundAreas = areaService.getAllForType(AreaType.DISTRICT);
+
+        assertThat(foundAreas).containsOnly(district, district2);
+    }
 }

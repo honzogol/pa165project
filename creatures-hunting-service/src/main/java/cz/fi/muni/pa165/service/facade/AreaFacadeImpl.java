@@ -7,6 +7,9 @@ import cz.fi.muni.pa165.enums.AreaType;
 import cz.fi.muni.pa165.facade.AreaFacade;
 import cz.fi.muni.pa165.service.BeanMappingService;
 import cz.fi.muni.pa165.service.AreaService;
+import cz.fi.muni.pa165.service.MonsterService;
+import java.util.List;
+import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,12 +23,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class AreaFacadeImpl implements AreaFacade {
 
     private final AreaService areaService;
+    
+    private final MonsterService monsterService;
 
     private final BeanMappingService beanMappingService;
 
     @Inject
-    public AreaFacadeImpl(AreaService areaService, BeanMappingService beanMappingService) {
+    public AreaFacadeImpl(AreaService areaService, MonsterService monsterService, BeanMappingService beanMappingService) {
         this.areaService = areaService;
+        this.monsterService = monsterService;
         this.beanMappingService = beanMappingService;
     }
 
