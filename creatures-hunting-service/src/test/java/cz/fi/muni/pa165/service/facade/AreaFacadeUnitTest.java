@@ -99,6 +99,10 @@ public class AreaFacadeUnitTest extends AbstractTestNGSpringContextTests {
         districtDTO.setId(1L);
         mountainsDTO.setId(2L);
         district2DTO.setId(3L);
+        
+        districtDTO.setName(district.getName());
+        district2DTO.setName(district2.getName());
+        mountainsDTO.setName(mountains.getName());
 
         districtCreateDTO = new AreaCreateDTO();
         districtCreateDTO.setName(district.getName());

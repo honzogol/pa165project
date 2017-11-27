@@ -72,7 +72,7 @@ public class AreaDTO {
         if (type != areaDTO.type) {
             return false;
         }
-        return monsters != null ? !monsters.equals(areaDTO.monsters) : areaDTO.monsters != null;
+        return !(monsters != null ? !monsters.equals(areaDTO.monsters) : areaDTO.monsters != null);
     }
 
     @Override
