@@ -63,13 +63,21 @@ public interface AreaService {
      * @return List of Areas with given type.
      */
     List<Area> getAllForType(AreaType type);
-    
+
     /**
      * Adds Monster to Area
-     * 
+     *
      * @param area to be used.
      * @param monster To be added.
      */
     void addMonsterToArea(Area area, Monster monster);
-    
+
+    /**
+     * Remove Monster From Area
+     *
+     * @param area to be used.
+     * @param monster To be removed.
+     */
+    void removeMonsterFromArea(Area area, Monster monster);
+
 }

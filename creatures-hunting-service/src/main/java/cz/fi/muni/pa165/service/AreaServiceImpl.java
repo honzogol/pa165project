@@ -79,4 +79,15 @@ public class AreaServiceImpl implements AreaService {
         }
         area.addMonster(monster);
     }
+
+    @Override
+    public void removeMonsterFromArea(Area area, Monster monster) {
+        if (!area.getMonsters().contains(monster)) {
+            throw new IllegalArgumentException(
+                    "Monster is not in this area. monster: "
+                    + monster.getId() + ", area: "
+                    + area.getId());
+        }
+        area.removeMonster(monster);
+    }
 }

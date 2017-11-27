@@ -17,13 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Jan GOl <gol.honza@gmail.com>
  */
-
 @Service
 @Transactional
 public class AreaFacadeImpl implements AreaFacade {
 
     private final AreaService areaService;
-    
+
     private final MonsterService monsterService;
 
     private final BeanMappingService beanMappingService;
@@ -70,6 +69,12 @@ public class AreaFacadeImpl implements AreaFacade {
     @Override
     public void addMonsterToArea(Long areaId, Long monsterId) {
         areaService.addMonsterToArea(areaService.findById(monsterId),
+                monsterService.findById(areaId));
+    }
+
+    @Override
+    public void removeMonsterFromArea(Long areaId, Long monsterId) {
+        areaService.removeMonsterFromArea(areaService.findById(monsterId),
                 monsterService.findById(areaId));
     }
 }

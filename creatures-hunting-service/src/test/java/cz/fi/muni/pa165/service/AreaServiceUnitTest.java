@@ -34,7 +34,8 @@ public class AreaServiceUnitTest {
     private Area district;
     private Area mountains;
     private Area district2;
-    
+
+    private Monster m1;
     private Monster m2;
     private Monster m3;
 
@@ -42,7 +43,7 @@ public class AreaServiceUnitTest {
     public void createEntities() {
         areaService = new AreaServiceImpl(areaDao);
 
-        Monster m1 = new Monster("Handless Butcher");
+        m1 = new Monster("Handless Butcher");
         m2 = new Monster("Kyles Mom");
         m3 = new Monster("Something scary");
 
@@ -135,6 +136,17 @@ public class AreaServiceUnitTest {
         areaService.addMonsterToArea(district2, m3);
 
         assertThat(district2.getMonsters()).containsOnly(m2, m3);
+
+    }
+
+    @Test
+    public void testRemoveMonsterFromArea() {
+        when(areaDao.findById(district.getId())).thenReturn(district);
+        when(monsterDao.findById(m2.getId())).thenReturn(m2);
+
+        areaService.removeMonsterFromArea(district, m2);
+
+        assertThat(district.getMonsters()).containsOnly(m1);
 
     }
 }

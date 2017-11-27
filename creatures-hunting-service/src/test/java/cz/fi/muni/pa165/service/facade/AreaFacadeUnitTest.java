@@ -65,8 +65,8 @@ public class AreaFacadeUnitTest extends AbstractTestNGSpringContextTests {
     @BeforeMethod
     public void createEntities() {
 
-        Monster m1 = new Monster("Handless Butcher");
-        Monster m2 = new Monster("Kyles Mom");
+        m1 = new Monster("Handless Butcher");
+        m2 = new Monster("Kyles Mom");
 
         district = new Area("District");
         mountains = new Area("Mountains");
@@ -99,7 +99,7 @@ public class AreaFacadeUnitTest extends AbstractTestNGSpringContextTests {
         districtDTO.setId(1L);
         mountainsDTO.setId(2L);
         district2DTO.setId(3L);
-        
+
         districtDTO.setName(district.getName());
         district2DTO.setName(district2.getName());
         mountainsDTO.setName(mountains.getName());
@@ -165,12 +165,23 @@ public class AreaFacadeUnitTest extends AbstractTestNGSpringContextTests {
     public void testAddMonsterToArea() {
         Long id = 1L;
 
-        when(areaService.findById(id)).thenReturn(district);
-        when(monsterService.findById(id)).thenReturn(m2);
+        when(areaService.findById(id)).thenReturn(district2);
+        when(monsterService.findById(id)).thenReturn(m1);
 
         areaFacade.addMonsterToArea(id, id);
 
-        verify(areaService, times(1)).addMonsterToArea(district, m2);
+        verify(areaService, times(1)).addMonsterToArea(district2, m1);
     }
 
+    @Test
+    public void testRemoveMonsterFromArea() {
+        Long id = 1L;
+
+        when(areaService.findById(id)).thenReturn(district);
+        when(monsterService.findById(id)).thenReturn(m1);
+
+        areaFacade.removeMonsterFromArea(id, id);
+
+        verify(areaService, times(1)).removeMonsterFromArea(district, m1);
+    }
 }
