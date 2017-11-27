@@ -47,11 +47,14 @@ public class AreaFacadeUnitTest {
     private Area district;
     private Area mountains;
     private Area district2;
+    
+    private Monster m1;
+    private Monster m2;
 
     private AreaDTO districtDTO;
     private AreaDTO district2DTO;
     private AreaDTO mountainsDTO;
-    
+
     private AreaCreateDTO districtCreateDTO;
 
     @BeforeMethod
@@ -96,7 +99,7 @@ public class AreaFacadeUnitTest {
         districtDTO.setId(1L);
         mountainsDTO.setId(2L);
         district2DTO.setId(3L);
-        
+
         districtCreateDTO = new AreaCreateDTO();
     }
 
@@ -151,13 +154,17 @@ public class AreaFacadeUnitTest {
 
         assertThat(foundArea).isEqualToComparingFieldByField(districtDTO);
     }
-    
+
     @Test
-    public void testAddMonsterToArea() throws Exception {
-        
-        
-        
-        
+    public void testAddMonsterToArea() {
+        Long id = 1L;
+
+        when(areaService.findById(id)).thenReturn(district);
+        when(monsterService.findById(id)).thenReturn(m2);
+
+        areaFacade.addMonsterToArea(id, id);
+
+        verify(areaService, times(1)).addMonsterToArea(district, m2);
     }
 
 }

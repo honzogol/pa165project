@@ -1,6 +1,7 @@
 package cz.fi.muni.pa165.service;
 
 import cz.fi.muni.pa165.dao.AreaDao;
+import cz.fi.muni.pa165.dao.MonsterDao;
 import cz.fi.muni.pa165.entity.Area;
 import cz.fi.muni.pa165.entity.Monster;
 import cz.fi.muni.pa165.enums.AreaType;
@@ -25,6 +26,7 @@ import static org.mockito.Mockito.when;
 public class AreaServiceUnitTest {
 
     private AreaDao areaDao = mock(AreaDao.class);
+    private MonsterDao monsterDao = mock(MonsterDao.class);
 
     @InjectMocks
     private AreaService areaService;
@@ -32,6 +34,8 @@ public class AreaServiceUnitTest {
     private Area district;
     private Area mountains;
     private Area district2;
+    
+    private Monster m2;
 
     @BeforeMethod
     public void createEntities() {
@@ -120,9 +124,15 @@ public class AreaServiceUnitTest {
 
         assertThat(foundAreas).containsOnly(district, district2);
     }
-    
+
     @Test
-    public void testAddMonsterToArea(){
-        
+    public void testAddMonsterToArea() {
+        when(areaDao.findById(district2.getId())).thenReturn(district2);
+        when(monsterDao.findById(m2.getId())).thenReturn(m2);
+
+        areaService.addMonsterToArea(district2, m2);
+
+        assertThat(district2.getMonsters()).containsOnly(m2);
+
     }
 }
