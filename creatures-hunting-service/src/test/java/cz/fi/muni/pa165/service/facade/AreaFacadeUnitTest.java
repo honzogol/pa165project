@@ -33,7 +33,7 @@ import static org.mockito.Mockito.when;
  * @author Jan GOl <gol.honza@gmail.com>
  */
 @ContextConfiguration(classes = ServiceConfiguration.class)
-public class AreaFacadeUnitTest {
+public class AreaFacadeUnitTest extends AbstractTestNGSpringContextTests {
 
     private AreaService areaService = mock(AreaService.class);
     private MonsterService monsterService = mock(MonsterService.class);
