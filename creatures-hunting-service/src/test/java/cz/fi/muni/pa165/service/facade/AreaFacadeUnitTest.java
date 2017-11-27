@@ -47,7 +47,7 @@ public class AreaFacadeUnitTest extends AbstractTestNGSpringContextTests {
     private Area district;
     private Area mountains;
     private Area district2;
-    
+
     private Monster m1;
     private Monster m2;
 
@@ -101,6 +101,8 @@ public class AreaFacadeUnitTest extends AbstractTestNGSpringContextTests {
         district2DTO.setId(3L);
 
         districtCreateDTO = new AreaCreateDTO();
+        districtCreateDTO.setName(district.getName());
+        districtCreateDTO.setType(district.getType());
     }
 
     @Test
