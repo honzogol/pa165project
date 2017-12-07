@@ -62,5 +62,7 @@
         <module>creatures-hunting-persistence</module>
         <module>creatures-hunting-service</module>
         <module>creatures-hunting-api</module>
+        <module>creatures-hunting-rest</module>
+        <module>creatures-hunting-sample-data</module>
     </modules>
 </project>

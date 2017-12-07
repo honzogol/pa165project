@@ -18,6 +18,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+/**
+ * @author Vojtech Sassmann <vojtech.sassmann@gmail.com>
+ */
 public class MonsterServiceUnitTest {
 
 	private MonsterDao monsterDao = mock(MonsterDao.class);
@@ -30,12 +33,9 @@ public class MonsterServiceUnitTest {
 	private Monster spider;
 
 	@BeforeMethod
-	public void setService() {
-		monsterService = new MonsterServiceImpl(monsterDao);
-	}
-
-	@BeforeMethod
 	public void createEntities() {
+		monsterService = new MonsterServiceImpl(monsterDao);
+
 		Area a1 = new Area("Desert");
 		Area a2 = new Area("Forest");
 

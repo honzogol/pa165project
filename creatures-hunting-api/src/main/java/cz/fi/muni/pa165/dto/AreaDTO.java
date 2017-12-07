@@ -44,11 +44,11 @@ public class AreaDTO {
         return monsters;
     }
 
-    public void addAppropriateMonster(MonsterDTO monsterDTO) {
+    public void addMonster(MonsterDTO monsterDTO) {
         monsters.add(monsterDTO);
     }
 
-    public void removeAppropriateMonster(MonsterDTO monsterDTO) {
+    public void removeMonster(MonsterDTO monsterDTO) {
         monsters.remove(monsterDTO);
     }
 
@@ -72,7 +72,7 @@ public class AreaDTO {
         if (type != areaDTO.type) {
             return false;
         }
-        return monsters != null ? !monsters.equals(areaDTO.monsters) : areaDTO.monsters != null;
+        return !(monsters != null ? !monsters.equals(areaDTO.monsters) : areaDTO.monsters != null);
     }
 
     @Override

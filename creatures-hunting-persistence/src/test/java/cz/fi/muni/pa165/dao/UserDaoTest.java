@@ -35,6 +35,8 @@ public class UserDaoTest extends AbstractTestNGSpringContextTests {
         user.setFirstName("Regular");
         user.setLastName("User");
         user.setEmail("somerandomregularuser@worldofjava.com");
+        user.setPasswordHash("65df2x8e5s");
+        user.setRole(UserRole.REGULAR);
         userDao.create(user);
         return user;
     }
@@ -44,6 +46,8 @@ public class UserDaoTest extends AbstractTestNGSpringContextTests {
         user.setFirstName("Second");
         user.setLastName("Regularuser");
         user.setEmail("secondrandomuserwithemail@worldofjava.com");
+        user.setPasswordHash("xdfs6e52x5d");
+        user.setRole(UserRole.REGULAR);
         userDao.create(user);
         return user;
     }

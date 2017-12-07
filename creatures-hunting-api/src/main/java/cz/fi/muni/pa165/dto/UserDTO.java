@@ -13,6 +13,7 @@ public class UserDTO {
 	private String firstName;
 	private String lastName;
 	private String email;
+	private String passwordHash;
 	private UserRole role;
 
 	public Long getId() {
@@ -48,6 +49,14 @@ public class UserDTO {
 		this.email = email;
 	}
 
+	public String getPasswordHash() {
+		return passwordHash;
+	}
+
+	public void setPasswordHash(String passwordHash) {
+		this.passwordHash = passwordHash;
+	}
+
 	public UserRole getRole() {
 		return role;
 	}
@@ -57,36 +66,43 @@ public class UserDTO {
 	}
 
 	@Override
-	public String toString() {
-		return "UserDTO{" +
-				"id=" + getId() +
-				", firstName='" + getFirstName() + '\'' +
-				", lastName='" + getLastName() + '\'' +
-				", email='" + getEmail() + '\'' +
-				", role=" + getRole() +
-				'}';
-	}
-
-	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (o == null || !(o instanceof UserDTO)) return false;
+		if (o == null || getClass() != o.getClass()) return false;
 
 		UserDTO userDTO = (UserDTO) o;
 
+		if (getId() != null ? !getId().equals(userDTO.getId()) : userDTO.getId() != null) return false;
 		if (getFirstName() != null ? !getFirstName().equals(userDTO.getFirstName()) : userDTO.getFirstName() != null)
 			return false;
 		if (getLastName() != null ? !getLastName().equals(userDTO.getLastName()) : userDTO.getLastName() != null)
 			return false;
-		return getEmail() != null ? getEmail().equals(userDTO.getEmail()) : userDTO.getEmail() == null;
+		if (getEmail() != null ? !getEmail().equals(userDTO.getEmail()) : userDTO.getEmail() != null) return false;
+		if (getPasswordHash() != null ? !getPasswordHash().equals(userDTO.getPasswordHash()) : userDTO.getPasswordHash() != null)
+			return false;
+		return getRole() == userDTO.getRole();
 	}
 
 	@Override
 	public int hashCode() {
-		int result = getFirstName() != null ? getFirstName().hashCode() : 0;
+		int result = getId() != null ? getId().hashCode() : 0;
+		result = 31 * result + (getFirstName() != null ? getFirstName().hashCode() : 0);
 		result = 31 * result + (getLastName() != null ? getLastName().hashCode() : 0);
 		result = 31 * result + (getEmail() != null ? getEmail().hashCode() : 0);
+		result = 31 * result + (getPasswordHash() != null ? getPasswordHash().hashCode() : 0);
+		result = 31 * result + (getRole() != null ? getRole().hashCode() : 0);
 		return result;
 	}
 
+	@Override
+	public String toString() {
+		return "UserDTO{" +
+				"id=" + id +
+				", firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				", email='" + email + '\'' +
+				", passwordHash='" + passwordHash + '\'' +
+				", role=" + role +
+				'}';
+	}
 }

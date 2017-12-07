@@ -2,7 +2,9 @@ package cz.fi.muni.pa165.dto;
 
 import cz.fi.muni.pa165.enums.MonsterAgility;
 
-
+/**
+ * @author Vojtech Sassmann <vojtech.sassmann@gmail.com>
+ */
 public class MonsterCreateDTO {
 	private String name;
 	private Double height;
@@ -61,5 +63,15 @@ public class MonsterCreateDTO {
 		result = 31 * result + (weight != null ? weight.hashCode() : 0);
 		result = 31 * result + (agility != null ? agility.hashCode() : 0);
 		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "MonsterCreateDTO{" +
+				"name='" + name + '\'' +
+				", height=" + height +
+				", weight=" + weight +
+				", agility=" + agility +
+				'}';
 	}
 }

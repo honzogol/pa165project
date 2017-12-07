@@ -13,7 +13,7 @@ public class WeaponCreateDTO {
 
     private String name;
     private WeaponType type;
-    private Set<MonsterDTO> appropriateMonsters = new HashSet<>();
+    private Set<Long> appropriateMonsters = new HashSet<>();
     private Integer range;
     private Integer magazineCapacity;
 
@@ -33,16 +33,16 @@ public class WeaponCreateDTO {
         this.type = type;
     }
 
-    public Set<MonsterDTO> getAppropriateMonsters() {
+    public Set<Long> getAppropriateMonsters() {
         return appropriateMonsters;
     }
 
-    public void addAppropriateMonster(MonsterDTO monsterDTO){
-        appropriateMonsters.add(monsterDTO);
+    public void addAppropriateMonster(Long monsterId){
+        appropriateMonsters.add(monsterId);
     }
 
-    public void removeAppropriateMonster(MonsterDTO monsterDTO){
-        appropriateMonsters.remove(monsterDTO);
+    public void removeAppropriateMonster(Long monsterId){
+        appropriateMonsters.remove(monsterId);
     }
 
     public Integer getRange() {

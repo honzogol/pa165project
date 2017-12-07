@@ -25,4 +25,6 @@ public interface AreaFacade {
     AreaDTO findByName(String name);
     
     void addMonsterToArea(Long areaId, Long monsterId);
+    
+    void removeMonsterFromArea(Long areaId, Long monsterId);
 }

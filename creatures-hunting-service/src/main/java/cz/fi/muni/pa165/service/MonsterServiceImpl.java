@@ -9,6 +9,9 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author Vojtech Sassmann <vojtech.sassmann@gmail.com>
+ */
 @Service
 public class MonsterServiceImpl implements MonsterService {
 
