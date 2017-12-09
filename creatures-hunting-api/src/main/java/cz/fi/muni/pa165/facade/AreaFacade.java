@@ -40,7 +40,7 @@ public interface AreaFacade {
      * @param update To be used.
      * @return Updated AreaDTO
      */
-    AreaDTO updateMonster(AreaUpdateDTO update);
+    AreaDTO updateArea(AreaUpdateDTO update);
 
     /**
      * Returns a List of Areas with given AreaType.

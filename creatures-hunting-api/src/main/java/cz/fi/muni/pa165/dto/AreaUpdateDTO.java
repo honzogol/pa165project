@@ -17,7 +17,6 @@ public class AreaUpdateDTO {
     private Long id;
     private String name;
     private AreaType type;
-    private Set<Long> monsterIds = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -43,22 +42,6 @@ public class AreaUpdateDTO {
         this.type = type;
     }
 
-    public Set<Long> getMonsterIds() {
-        return monsterIds;
-    }
-
-    public void addMonster(Long monsterId) {
-        monsterIds.add(monsterId);
-    }
-
-    public void removeMonster(long monsterId) {
-        monsterIds.remove(monsterId);
-    }
-
-    public Set<Long> getMonsters() {
-        return monsterIds;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -73,17 +56,14 @@ public class AreaUpdateDTO {
         if (name != null ? !name.equals(that.getName()) : that.getName() != null) {
             return false;
         }
-        if (type != that.getType()) {
-            return false;
-        }
-        return monsterIds != null ? !monsterIds.equals(that.getMonsters()) : that.getMonsters() != null;
+        
+        return type != null ? !type.equals(that.getType()) : that.getType() == null;
     }
 
     @Override
     public int hashCode() {
         int result = name != null ? name.hashCode() : 0;
         result = 83 * result + (type != null ? type.hashCode() : 0);
-        result = 83 * result + (monsterIds != null ? monsterIds.hashCode() : 0);
         return result;
     }
 
@@ -93,7 +73,6 @@ public class AreaUpdateDTO {
                 + "id=" + id
                 + ", name='" + name + '\''
                 + ", type=" + type
-                + ", monsterIds=" + monsterIds
                 + '}';
     }
 }
