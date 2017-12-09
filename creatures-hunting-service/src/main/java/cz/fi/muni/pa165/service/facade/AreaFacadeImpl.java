@@ -2,6 +2,7 @@ package cz.fi.muni.pa165.service.facade;
 
 import cz.fi.muni.pa165.dto.AreaCreateDTO;
 import cz.fi.muni.pa165.dto.AreaDTO;
+import cz.fi.muni.pa165.dto.AreaUpdateDTO;
 import cz.fi.muni.pa165.entity.Area;
 import cz.fi.muni.pa165.enums.AreaType;
 import cz.fi.muni.pa165.facade.AreaFacade;
@@ -44,6 +45,26 @@ public class AreaFacadeImpl implements AreaFacade {
     @Override
     public void deleteArea(Long id) {
         areaService.deleteArea(areaService.findById(id));
+    }
+
+    @Override
+    public AreaDTO updateArea(AreaUpdateDTO update) {
+        Area area = areaService.findById(update.getId());
+
+        if (area == null) {
+            return null;
+        }
+
+        area.setName(update.getName());
+        area.setType(update.getType());
+        area.setSomeHowSetOfMonsters
+
+        return beanMappingService.mapTo(area, AreaDTO.class);
+    }
+
+    @Override
+    public List<MonsterDTO> getTheMostDangerousAreas() {
+        return beanMappingService.mapTo(areaService.getTheMostDangerousAreas(), AreaDTO.class);
     }
 
     @Override
