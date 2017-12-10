@@ -8,6 +8,7 @@ import cz.fi.muni.pa165.dto.AreaDTO;
 import cz.fi.muni.pa165.dto.AreaUpdateDTO;
 import cz.fi.muni.pa165.enums.AreaType;
 import cz.fi.muni.pa165.facade.AreaFacade;
+import cz.fi.muni.pa165.facade.MonsterFacade;
 import cz.fi.muni.pa165.rest.controllers.GlobalExceptionController;
 import cz.fi.muni.pa165.rest.controllers.AreaController;
 import org.mockito.InjectMocks;
@@ -51,9 +52,10 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 public class AreaControllerTest {
 
     private AreaFacade areaFacade = mock(AreaFacade.class);
+    private MonsterFacade monsterFacade = mock(MonsterFacade.class);
 
     @InjectMocks
-    private AreaController areaController = new AreaController(areaFacade);
+    private AreaController areaController = new AreaController(areaFacade, monsterFacade);
 
     private MockMvc mockMvc;
 
@@ -71,12 +73,12 @@ public class AreaControllerTest {
         district.setName("District");
         district.setId(1L);
         district.setType(AreaType.DISTRICT);
-        
+
         AreaDTO mountains = new AreaDTO();
         mountains.setName("Mountains");
         mountains.setId(2L);
         mountains.setType(AreaType.OTHER);
-        
+
         AreaDTO desert = new AreaDTO();
         desert.setName("Desert");
         desert.setId(3L);
@@ -154,7 +156,7 @@ public class AreaControllerTest {
 
         String json = convertObjectToJsonBytes(areaUpdateDTO);
 
-        mockMvc.perform(put("/areas/1")
+        mockMvc.perform(put("/areas/update")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(status().isOk())
@@ -209,7 +211,7 @@ public class AreaControllerTest {
         List<AreaDTO> areas = this.createAreas();
 
         when(areaFacade.getTheMostDangerousAreas()).thenReturn(areas);
-        
+
         mockMvc.perform(get("/areas/filter/mostDangerous"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
@@ -219,36 +221,46 @@ public class AreaControllerTest {
     }
 
     @Test
+
     public void testAddMonsterToArea() throws Exception {
+
         MonsterDTO monsterDTO = new MonsterDTO();
         monsterDTO.setId(1L);
         monsterDTO.setName("Petr Adamek");
 
         String json = convertObjectToJsonBytes(monsterDTO);
 
-        mockMvc.perform(post("/areas/addMonsterToArea/1")
+        when(monsterFacade.findById(1L)).thenReturn(monsterDTO);
+
+        mockMvc.perform(post("/areas/1/addMonsterToArea?id=1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(json))
                 .andExpect(status().isOk());
 
         verify(areaFacade, times(1)).addMonsterToArea(1L, monsterDTO.getId());
+
     }
 
     @Test
+
     public void testRemoveMonsterFromArea() throws Exception {
+
         MonsterDTO monsterDTO = new MonsterDTO();
         monsterDTO.setId(1L);
         monsterDTO.setName("Tomáš Pitner");
 
         String json = convertObjectToJsonBytes(monsterDTO);
 
-        areaController.addMonsterToArea(1L, monsterDTO);
+        when(monsterFacade.findById(1L)).thenReturn(monsterDTO);
 
-        mockMvc.perform(post("/areas/removeMonsterFromArea/1")
+        areaController.addMonsterToArea(1L, monsterDTO.getId());
+
+        mockMvc.perform(post("/areas/1/removeMonsterFromArea?id=1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(json))
                 .andExpect(status().isOk());
 
         verify(areaFacade, times(1)).removeMonsterFromArea(1L, monsterDTO.getId());
+
     }
 }

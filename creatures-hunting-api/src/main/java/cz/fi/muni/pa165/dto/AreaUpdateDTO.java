@@ -57,7 +57,7 @@ public class AreaUpdateDTO {
             return false;
         }
         
-        return type != null ? !type.equals(that.getType()) : that.getType() == null;
+        return type != null ? type.equals(that.getType()) : that.getType() == null;
     }
 
     @Override

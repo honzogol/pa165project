@@ -6,6 +6,7 @@ import cz.fi.muni.pa165.dto.AreaDTO;
 import cz.fi.muni.pa165.dto.AreaUpdateDTO;
 import cz.fi.muni.pa165.enums.AreaType;
 import cz.fi.muni.pa165.facade.AreaFacade;
+import cz.fi.muni.pa165.facade.MonsterFacade;
 import cz.fi.muni.pa165.rest.ApiUris;
 import cz.fi.muni.pa165.rest.exceptions.InvalidParameterException;
 import cz.fi.muni.pa165.rest.exceptions.ResourceAlreadyExistingException;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
 import java.util.List;
+import org.springframework.data.repository.query.Param;
 
 /**
  *
@@ -33,10 +35,12 @@ public class AreaController {
     private final static Logger log = LoggerFactory.getLogger(AreaController.class);
 
     private final AreaFacade areaFacade;
+    private final MonsterFacade monsterFacade;
 
     @Inject
-    public AreaController(AreaFacade areaFacade) {
+    public AreaController(AreaFacade areaFacade, MonsterFacade monsterFacade) {
         this.areaFacade = areaFacade;
+        this.monsterFacade = monsterFacade;
     }
 
     /**
@@ -103,17 +107,14 @@ public class AreaController {
      * "MOUNTAINS", "name": "Mountains full of Kyle Moms"}'
      * http://localhost:8080/pa165/rest/areas/1
      *
-     * @param id identified of the area to be updated
      * @param areaUpdate required fields as specified in AreaUpdateDTO except id
      * @return the updated AreaDTO
      * @throws InvalidParameterException when the given parameters are invalid
      * @throws ResourceNotFoundException when area with given id is not found
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE,
+    @RequestMapping(value = "/update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public final AreaDTO updateArea(@PathVariable("id") long id, @RequestBody AreaUpdateDTO areaUpdate) {
-
-        areaUpdate.setId(id);
+    public final AreaDTO updateArea(@RequestBody AreaUpdateDTO areaUpdate) {
 
         log.debug("rest updateArea({})", areaUpdate);
 
@@ -211,50 +212,73 @@ public class AreaController {
     }
 
     /**
+     *
      * Add MonsterDTO to area.
      *
-     * curl -i -X POST -H "Content-Type: application/json" --data 
-     * '{"name":"Jiri Uhlir","height":155.2,"weight":70.5,"agility":"FAST"}'
-     * http://localhost:8080/pa165/rest/areas/addMonsterToArea/1
      *
-     * @param id identified of the area to be updated
-     * @param monsterDTO MonsterDTO
-     * @throws InvalidParameterException when the given parameters are invalid
+     *
+     * curl -i -X POST -H "Content-Type: application/json"
+     *
+     * http://localhost:8080/pa165/rest/areas/1/addMonsterToArea?id=2
+     *
+     *
+     *
+     * @param areaId identifier of the area to be updated
+     *
+     * @param id identifier of the area to be added
+     *
+     * @throws ResourceNotFoundException when given id does not match any
+     * MonsterDTO object
+     *
      */
-    @RequestMapping(value = "/addMonsterToArea/{id}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public final void addMonsterToArea(@PathVariable("id") long id, @RequestBody MonsterDTO monsterDTO) {
-        log.debug("Rest addMonsterToArea with id ({}) to area with id({})", monsterDTO.getId(), id);
+    @RequestMapping(value = "{areaId}/addMonsterToArea", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+
+    public final void addMonsterToArea(@PathVariable("areaId") long areaId, @Param("id") long id) {
+
+        log.debug("Rest addMonsterToArea with id ({}) to area with id({})", id, areaId);
+
+        MonsterDTO monsterDTO = monsterFacade.findById(id);
 
         if (monsterDTO == null) {
-            throw new InvalidParameterException("Argument monsterDTO is null");
+
+            throw new ResourceNotFoundException("Monster with this id does not exist.");
+
         }
-        if (monsterDTO.getId() == null) {
-            throw new InvalidParameterException("Value `id` in monster is required!");
-        }
-        areaFacade.addMonsterToArea(id, monsterDTO.getId());
+
+        areaFacade.addMonsterToArea(areaId, monsterDTO.getId());
+
     }
 
     /**
+     *
      * Remove MonsterDTO from area.
      *
-     * curl -i -X POST -H "Content-Type: application/json" --data
-     * '{"name":"Martin Kotala","height":150.2,"weight":70.5,"agility":"FAST"}'
-     * http://localhost:8080/pa165/rest/areas/removeMonsterFromArea/1
      *
-     * @param id identified of the area to be updated
-     * @param monsterDTO monsterDTO
+     *
+     * curl -i -X POST -H "Content-Type: application/json"
+     *
+     * http://localhost:8080/pa165/rest/areas/1/removeMonsterFromArea?id=1
+     *
+     *
+     *
+     * @param areaId identified of the area to be updated
+     *
+     * @param id identifier of the monster to be removed
+     *
      * @throws InvalidParameterException when the given parameters are invalid
+     *
      */
-    @RequestMapping(value = "/removeMonsterFromArea/{id}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public final void removeMonsterFromArea(@PathVariable("id") long id, MonsterDTO monsterDTO) {
-        log.debug("Rest removeMonsterFromArea with id ({}) for area with id({})", monsterDTO.getId(), id);
+    @RequestMapping(value = "/{areaId}/removeMonsterFromArea", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 
-        if (monsterDTO == null) {
-            throw new InvalidParameterException("Argument monsterDTO is null");
+    public final void removeMonsterFromArea(@PathVariable("areaId") long areaId, @Param("id") long id) {
+
+        log.debug("Rest removeMonsterFromArea with id ({}) for area with id({})", id, areaId);
+
+        try {
+            areaFacade.removeMonsterFromArea(areaId, id);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("Failed to remove monster from area.");
         }
-        if (monsterDTO.getId() == null) {
-            throw new InvalidParameterException("Value `id` in monster is required!");
-        }
-        areaFacade.removeMonsterFromArea(id, monsterDTO.getId());
+
     }
 }
