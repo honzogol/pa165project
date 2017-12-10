@@ -3,6 +3,7 @@ package cz.fi.muni.pa165.service.facade;
 import cz.fi.muni.pa165.dto.MonsterDTO;
 import cz.fi.muni.pa165.dto.WeaponCreateDTO;
 import cz.fi.muni.pa165.dto.WeaponDTO;
+import cz.fi.muni.pa165.dto.WeaponUpdateDTO;
 import cz.fi.muni.pa165.entity.Monster;
 import cz.fi.muni.pa165.entity.Weapon;
 import cz.fi.muni.pa165.enums.MonsterAgility;
@@ -11,10 +12,8 @@ import cz.fi.muni.pa165.facade.WeaponFacade;
 import cz.fi.muni.pa165.service.BeanMappingService;
 import cz.fi.muni.pa165.service.MonsterService;
 import cz.fi.muni.pa165.service.WeaponService;
-import cz.fi.muni.pa165.service.config.ServiceConfiguration;
 import org.mockito.InjectMocks;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -25,6 +24,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -128,6 +128,13 @@ public class WeaponFacadeUnitTest{
 
     }
 
+    @AfterMethod
+    private void resetMock(){
+        reset(weaponService);
+        reset(monsterService);
+        reset(beanMappingService);
+    }
+
     @Test
     public void testCreateWeapon(){
         when(beanMappingService.mapTo(pistolCreateDTO, Weapon.class)).thenReturn(pistol);
@@ -153,6 +160,79 @@ public class WeaponFacadeUnitTest{
         weaponFacade.deleteWeapon(id);
 
         verify(weaponService, times(1)).deleteWeapon(pistol);
+    }
+
+    @Test
+    public void testUpdateName(){
+        when(weaponService.findById(2L)).thenReturn(rifle);
+
+        WeaponUpdateDTO weaponUpdateDTO = new WeaponUpdateDTO();
+        weaponUpdateDTO.setId(2L);
+        weaponUpdateDTO.setName("New name");
+        weaponUpdateDTO.setType(rifle.getType());
+        weaponUpdateDTO.setRange(rifle.getRange());
+        weaponUpdateDTO.setMagazineCapacity(rifle.getMagazineCapacity());
+        weaponFacade.updateWeapon(weaponUpdateDTO);
+
+        assertThat(rifle.getName()).isEqualTo("New name");
+        assertThat(rifle.getType()).isEqualTo(rifle.getType());
+        assertThat(rifle.getMagazineCapacity()).isEqualTo(rifle.getMagazineCapacity());
+        assertThat(rifle.getRange()).isEqualTo(rifle.getRange());
+    }
+
+    @Test
+    public void testUpdateRange() {
+        when(weaponService.findById(2L)).thenReturn(rifle);
+
+        WeaponUpdateDTO weaponUpdateDTO = new WeaponUpdateDTO();
+        weaponUpdateDTO.setId(2L);
+        weaponUpdateDTO.setName(rifle.getName());
+        weaponUpdateDTO.setType(rifle.getType());
+        weaponUpdateDTO.setRange(1000);
+        weaponUpdateDTO.setMagazineCapacity(rifle.getMagazineCapacity());
+        weaponFacade.updateWeapon(weaponUpdateDTO);
+
+        assertThat(rifle.getName()).isEqualTo(rifle.getName());
+        assertThat(rifle.getType()).isEqualTo(rifle.getType());
+        assertThat(rifle.getMagazineCapacity()).isEqualTo(rifle.getMagazineCapacity());
+        assertThat(rifle.getRange()).isEqualTo(1000);
+    }
+
+    @Test
+    public void testUpdateWeaponType(){
+        when(weaponService.findById(2L)).thenReturn(rifle);
+
+        WeaponUpdateDTO weaponUpdateDTO = new WeaponUpdateDTO();
+        weaponUpdateDTO.setId(2L);
+        weaponUpdateDTO.setName(rifle.getName());
+        weaponUpdateDTO.setType(WeaponType.OTHER);
+        weaponUpdateDTO.setRange(rifle.getRange());
+        weaponUpdateDTO.setMagazineCapacity(rifle.getMagazineCapacity());
+        weaponFacade.updateWeapon(weaponUpdateDTO);
+
+        assertThat(rifle.getName()).isEqualTo(rifle.getName());
+        assertThat(rifle.getType()).isEqualTo(WeaponType.OTHER);
+        assertThat(rifle.getMagazineCapacity()).isEqualTo(rifle.getMagazineCapacity());
+        assertThat(rifle.getRange()).isEqualTo(rifle.getRange());
+
+    }
+
+    @Test
+    public void testUpdateMagazineCapacity(){
+        when(weaponService.findById(2L)).thenReturn(rifle);
+
+        WeaponUpdateDTO weaponUpdateDTO = new WeaponUpdateDTO();
+        weaponUpdateDTO.setId(2L);
+        weaponUpdateDTO.setName(rifle.getName());
+        weaponUpdateDTO.setType(rifle.getType());
+        weaponUpdateDTO.setRange(rifle.getRange());
+        weaponUpdateDTO.setMagazineCapacity(33);
+        weaponFacade.updateWeapon(weaponUpdateDTO);
+
+        assertThat(rifle.getName()).isEqualTo(rifle.getName());
+        assertThat(rifle.getType()).isEqualTo(rifle.getType());
+        assertThat(rifle.getMagazineCapacity()).isEqualTo(33);
+        assertThat(rifle.getRange()).isEqualTo(rifle.getRange());
     }
 
     @Test
