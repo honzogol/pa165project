@@ -1,3 +1,93 @@
-<p>
-  user-create works!
-</p>
+<mat-horizontal-stepper class="stepper" [linear]="true">
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Fill in the first name</ng-template>
+      <mat-form-field>
+        <input matInput #firstName placeholder="First name" formControlName="firstCtrl" required
+               pattern="^[a-zA-Z]+$">
+        <mat-error *ngIf="firstFormGroup.controls.firstCtrl.hasError('pattern') && !firstFormGroup.controls.firstCtrl.hasError('required')">
+          This is not valid name!
+        </mat-error>
+        <mat-error *ngIf="firstFormGroup.controls.firstCtrl.hasError('required')">
+          First name is required!
+        </mat-error>
+      </mat-form-field>
+      <div>
+        <button mat-raised-button color="primary" routerLink="/users">Cancel</button>
+        <button mat-raised-button color="primary" matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>Fill in the last name</ng-template>
+      <mat-form-field>
+        <input matInput #lastName placeholder="Last name" formControlName="secondCtrl" required
+               pattern="^[a-zA-Z]+$">
+        <mat-error *ngIf="secondFormGroup.controls.secondCtrl.hasError('pattern') && !secondFormGroup.controls.secondCtrl.hasError('required')">
+          This is not valid name!
+        </mat-error>
+        <mat-error *ngIf="secondFormGroup.controls.secondCtrl.hasError('required')">
+          Last name is required!
+        </mat-error>
+      </mat-form-field>
+      <div>
+        <button mat-raised-button color="primary" matStepperPrevious>Back</button>
+        <button mat-raised-button color="primary" matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="thirdFormGroup">
+    <form [formGroup]="thirdFormGroup">
+      <ng-template matStepLabel>Fill in the email</ng-template>
+      <mat-form-field>
+        <input matInput #email placeholder="Email" [type]="'email'" formControlName="thirdCtrl" required
+               pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+        <mat-error *ngIf="thirdFormGroup.controls.thirdCtrl.hasError('pattern') && !thirdFormGroup.controls.thirdCtrl.hasError('required')">
+          This is not valid email adress!
+        </mat-error>
+        <mat-error *ngIf="thirdFormGroup.controls.thirdCtrl.hasError('required')">
+          Email is required!
+        </mat-error>
+      </mat-form-field>
+      <div>
+        <button mat-raised-button color="primary" matStepperPrevious>Back</button>
+        <button mat-raised-button color="primary" matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="fourthFormGroup">
+    <form [formGroup]="fourthFormGroup">
+      <ng-template matStepLabel>Fill in the password</ng-template>
+      <mat-form-field>
+        <input matInput #password placeholder="Password" [type]="'password'" formControlName="fourthCtrl" required>
+        <mat-error *ngIf="fourthFormGroup.controls.fourthCtrl.hasError('required')">
+          Password is required!
+        </mat-error>
+      </mat-form-field>
+      <div>
+        <mat-form-field>
+          <input matInput #confirmPassword placeholder="Confirm password" [type]="'password'" formControlName="fifthCtrl" required>
+        </mat-form-field>
+        <mat-error *ngIf="areEqual(fourthFormGroup)">
+          Passwords aren't the same!
+        </mat-error>
+      </div>
+      <div>
+        <button mat-raised-button color="primary" matStepperPrevious>Back</button>
+        <button mat-raised-button color="primary" matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <div>
+      Confirm to create new user
+    </div>
+    <div class="buttons">
+      <button mat-raised-button color="primary" routerLink="/users">Cancel</button>
+      <button mat-raised-button color="primary" matStepperPrevious>Back</button>
+      <button mat-raised-button color="primary" (click)="createUser(firstName.value, lastName.value, email.value, password.value)">Create</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
