@@ -25,6 +25,7 @@ import {AreaDetailComponent} from "./manager/area-detail/area-detail.component";
 import {AreasComponent} from "./manager/areas/areas.component";
 import {CookieService} from "ngx-cookie-service";
 import {CookieLawModule} from "angular2-cookie-law";
+import { AddMonstersComponent } from './add-monsters-dialog/add-monsters-dialog.component';
 
 
 @NgModule({
@@ -44,7 +45,8 @@ import {CookieLawModule} from "angular2-cookie-law";
     UserCreateComponent,
     LoginComponent,
     ManagerComponent,
-    Error404Component
+    Error404Component,
+    AddMonstersComponent
   ],
   imports: [
     CookieLawModule,
@@ -53,6 +55,9 @@ import {CookieLawModule} from "angular2-cookie-law";
     BrowserAnimationsModule,
     MaterialModule,
     HttpClientModule,
+  ],
+  entryComponents: [
+    AddMonstersComponent,
   ],
   providers: [CookieService],
   bootstrap: [AppComponent]

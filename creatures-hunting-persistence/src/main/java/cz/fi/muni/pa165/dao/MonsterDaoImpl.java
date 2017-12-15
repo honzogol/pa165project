@@ -1,6 +1,8 @@
 package cz.fi.muni.pa165.dao;
 
+import cz.fi.muni.pa165.entity.Area;
 import cz.fi.muni.pa165.entity.Monster;
+import cz.fi.muni.pa165.entity.Weapon;
 import cz.fi.muni.pa165.enums.MonsterAgility;
 
 import javax.inject.Named;
@@ -32,6 +34,14 @@ public class MonsterDaoImpl implements MonsterDao {
 		if (monster == null) {
 			throw new IllegalArgumentException("Argument monster can not be null.");
 		}
+
+		for (Weapon weapon : monster.getAppropriateWeapons()) {
+			weapon.removeAppropriateMonster(monster);
+		}
+		for (Area area : monster.getAreas()) {
+			area.removeMonster(monster);
+		}
+
 		em.remove(monster);
 		em.flush();
 	}

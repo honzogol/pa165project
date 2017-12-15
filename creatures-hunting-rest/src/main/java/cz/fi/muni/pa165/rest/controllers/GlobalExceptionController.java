@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.Collections;
 
@@ -81,6 +82,15 @@ public class GlobalExceptionController {
 	@ResponseStatus(HttpStatus.FORBIDDEN)
 	@ResponseBody
 	public ApiError handleException(PrivilegeException e) {
+		ApiError apiError = new ApiError();
+		apiError.setErrors(Collections.singletonList(e.getMessage()));
+		return apiError;
+	}
+
+	@ExceptionHandler
+	@ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+	@ResponseBody
+	public ApiError handleException(MethodArgumentTypeMismatchException e) {
 		ApiError apiError = new ApiError();
 		apiError.setErrors(Collections.singletonList(e.getMessage()));
 		return apiError;
