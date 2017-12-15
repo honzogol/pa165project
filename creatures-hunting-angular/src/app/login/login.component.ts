@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
       },
       error => {
         console.log('Error: ' + error);
-        alert("Wrong email or password!");
+        alert('Error: ' + error.message);
       }
     )
   }
