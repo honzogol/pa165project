@@ -12,17 +12,18 @@ import {CookieService} from "ngx-cookie-service";
 })
 export class WeaponsComponent implements OnInit {
 
-  displayedColumns = ['id', 'name', 'type', 'range', 'magazineCapacity', 'edit', 'remove'];
+  displayedColumns = ['id', 'name', 'type', 'range', 'magazineCapacity', 'detail', 'remove'];
   showWeapons : boolean = false;
   weapons : Weapon[] = [];
   dataSource : MatTableDataSource<Weapon>;
   cookie: boolean = false;
-
+  isAdmin: boolean = false;
 
   constructor(private http: HttpClient, private cookieService: CookieService, private router: Router) {}
 
   ngOnInit() {
     this.cookie = this.cookieService.check('creatures-token');
+    this.checkIsAdminCookie()
     this.loadWeapons();
   }
 
@@ -31,6 +32,15 @@ export class WeaponsComponent implements OnInit {
       alert("You must log in.");
       this.router.navigate(['/login']);
     }
+  }
+
+  checkIsAdminCookie(){
+    if (this.cookieService.get('creatures-is_admin') == "true"){
+      this.isAdmin = true;
+      return;
+    }
+    this.displayedColumns = ['id', 'name', 'type', 'range', 'magazineCapacity', 'detail'];
+    this.isAdmin = false;
   }
 
   loadWeapons(){

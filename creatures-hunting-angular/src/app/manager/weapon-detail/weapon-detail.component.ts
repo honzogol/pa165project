@@ -23,6 +23,7 @@ export class WeaponDetailComponent implements OnInit {
   allMonsters: Monster[] = [];
   dataSource: MatTableDataSource<Monster>;
   dataSourceMonsters: MatTableDataSource<Monster>;
+  isAdmin: boolean = false;
 
   cookie: boolean = false;
 
@@ -33,6 +34,7 @@ export class WeaponDetailComponent implements OnInit {
 
   ngOnInit() {
     this.cookie = this.cookieService.check('creatures-token');
+    this.checkIsAdminCookie();
     this.loadData();
   }
 
@@ -41,6 +43,14 @@ export class WeaponDetailComponent implements OnInit {
       alert("You must log in.");
       this.router.navigate(['/login']);
     }
+  }
+
+  checkIsAdminCookie(){
+    if (this.cookieService.get('creatures-is_admin') == "true"){
+      this.isAdmin = true;
+      return;
+    }
+    this.isAdmin = false;
   }
 
   loadData(){

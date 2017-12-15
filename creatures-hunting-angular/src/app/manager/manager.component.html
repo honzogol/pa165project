@@ -4,23 +4,15 @@
 
     <span class="spacer"></span>
 
-    <div *ngIf="cookieIsAdmin">
+    <div>
       <button mat-button routerLink="">Home</button>
-      <button mat-button routerLink="/users">Users</button>
+      <button mat-button routerLink="/users" *ngIf="cookieIsAdmin">Users</button>
       <button mat-button routerLink="/monsters">Monsters</button>
       <button mat-button routerLink="/weapons">Weapons</button>
       <button mat-button routerLink="/areas">Areas</button>
-
     </div>
-
-    <div *ngIf="!cookieIsAdmin">
-      <button mat-button routerLink="">Home</button>
-      <button mat-button routerLink="/notImplemented">Add appropriate Monster to Weapon</button>
-      <button mat-button routerLink="/notImplemented">Add appropriate Monster to area</button>
-
-    </div>
-
     <button class="logout" mat-button (click)="logout()">Logout</button>
   </mat-toolbar-row>
 </mat-toolbar>
 <router-outlet></router-outlet>
+<cookie-law></cookie-law>

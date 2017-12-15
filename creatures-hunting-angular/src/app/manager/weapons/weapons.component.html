@@ -29,7 +29,7 @@
       <mat-cell *matCellDef="let weapon"> {{weapon.magazineCapacity}} </mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="edit">
+    <ng-container matColumnDef="detail">
       <mat-header-cell *matHeaderCellDef>  </mat-header-cell>
       <mat-cell *matCellDef="let weapon">
         <button mat-button color="primary" routerLink="{{weapon.id}}">Detail</button>
@@ -47,6 +47,6 @@
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
   <button mat-raised-button color="primary" routerLink="">Back</button>
-  <button mat-raised-button color="primary" routerLink="/create/weapon">Create new weapon</button>
+  <button mat-raised-button color="primary" routerLink="/create/weapon" *ngIf="isAdmin">Create new weapon</button>
 
 </mat-card>

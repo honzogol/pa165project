@@ -30,7 +30,7 @@
       <mat-cell *matCellDef="let monster"> {{monster.weight}} </mat-cell>
     </ng-container>
 
-    <ng-container matColumnDef="edit">
+    <ng-container matColumnDef="detail">
       <mat-header-cell *matHeaderCellDef>  </mat-header-cell>
       <mat-cell *matCellDef="let monster">
         <button mat-button color="primary" routerLink="{{monster.id}}">Detail</button>
@@ -48,5 +48,5 @@
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
   <button mat-raised-button color="primary" routerLink="">Back</button>
-  <button mat-raised-button color="primary" routerLink="/create/monster">Create new monster</button>
+  <button mat-raised-button color="primary" routerLink="/create/monster" *ngIf="isAdmin">Create new monster</button>
 </mat-card>

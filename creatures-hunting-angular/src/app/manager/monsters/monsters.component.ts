@@ -13,17 +13,28 @@ import {Router} from "@angular/router";
 })
 export class MonstersComponent implements OnInit {
 
-  displayedColumns = ['id', 'name', 'agility', 'height', 'weight', 'edit', 'remove'];
+  displayedColumns = ['id', 'name', 'agility', 'height', 'weight', 'detail', 'remove'];
   showMonsters: boolean = false;
   monsters: Monster[] = [];
   dataSource: MatTableDataSource<Monster>;
   cookie: boolean = false;
+  isAdmin: boolean = false;
 
   constructor(private http: HttpClient, private cookieService: CookieService, private router: Router) {}
 
   ngOnInit() {
     this.cookie = this.cookieService.check('creatures-token');
+    this.checkIsAdminCookie()
     this.loadMonsters();
+  }
+
+  checkIsAdminCookie(){
+    if (this.cookieService.get('creatures-is_admin') == "true"){
+      this.isAdmin = true;
+      return;
+    }
+    this.displayedColumns = ['id', 'name', 'agility', 'height', 'weight', 'detail'];
+    this.isAdmin = false;
   }
 
   checkIfCookieExist(){

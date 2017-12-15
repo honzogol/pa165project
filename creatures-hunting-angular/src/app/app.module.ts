@@ -24,6 +24,7 @@ import {AreaCreateComponent} from "./manager/area-create/area-create.component";
 import {AreaDetailComponent} from "./manager/area-detail/area-detail.component";
 import {AreasComponent} from "./manager/areas/areas.component";
 import {CookieService} from "ngx-cookie-service";
+import {CookieLawModule} from "angular2-cookie-law";
 
 
 @NgModule({
@@ -46,6 +47,7 @@ import {CookieService} from "ngx-cookie-service";
     Error404Component
   ],
   imports: [
+    CookieLawModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,

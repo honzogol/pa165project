@@ -4,22 +4,22 @@
   <div>
     <div>
       <mat-form-field>
-        <input matInput #name placeholder="Name" value="{{monster.name}}">
+        <input matInput #name placeholder="Name" value="{{monster.name}}" disabled="{{!isAdmin}}">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field>
-        <input matInput #height placeholder="Height" value="{{monster.height}}">
+        <input matInput #height placeholder="Height" value="{{monster.height}}" disabled="{{!isAdmin}}">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field>
-        <input matInput #weight placeholder="Weight" value="{{monster.weight}}">
+        <input matInput #weight placeholder="Weight" value="{{monster.weight}}" disabled="{{!isAdmin}}">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field>
-        <mat-select placeholder="Agility" [(value)]="selectedAgility">
+        <mat-select placeholder="Agility" [(value)]="selectedAgility" disabled="{{!isAdmin}}">
           <mat-option value="SLOW">Slow</mat-option>
           <mat-option value="FAST">Fast</mat-option>
           <mat-option >Not selected</mat-option>
@@ -29,6 +29,6 @@
   </div>
 
   <button mat-raised-button color="primary" routerLink="/monsters">Back</button>
-  <button mat-raised-button color="primary" (click)="updateMonster(name.value, height.value, weight.value, selectedAgility)">Update</button>
+  <button mat-raised-button color="primary" (click)="updateMonster(name.value, height.value, weight.value, selectedAgility)" *ngIf="isAdmin">Update</button>
 
 </mat-card>

@@ -4,12 +4,12 @@
   <div>
     <div>
       <mat-form-field>
-        <input matInput #name  placeholder="Name" value="{{weapon.name}}">
+        <input matInput #name  placeholder="Name" value="{{weapon.name}}" disabled="{{!isAdmin}}">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field>
-        <mat-select placeholder="Type" [(value)]="weaponType">
+        <mat-select placeholder="Type" [(value)]="weaponType" disabled="{{!isAdmin}}">
           <mat-option value="PISTOL">Pistol</mat-option>
           <mat-option value="RIFLE">Rifle</mat-option>
           <mat-option value="SHOTGUN">Shotgun</mat-option>
@@ -21,16 +21,16 @@
 
     <div>
       <mat-form-field>
-        <input matInput #range placeholder="Range" value="{{weapon.range}}">
+        <input matInput #range placeholder="Range" value="{{weapon.range}}" disabled="{{!isAdmin}}">
       </mat-form-field>
     </div>
     <div>
       <mat-form-field>
-        <input matInput #magazineCapacity placeholder="Magazine Capacity" value="{{weapon.magazineCapacity}}">
+        <input matInput #magazineCapacity placeholder="Magazine Capacity" value="{{weapon.magazineCapacity}}" disabled="{{!isAdmin}}">
       </mat-form-field>
     </div>
 
-    <h4>Appropriate Monsters:</h4>
+    <h4>This weapon is good against:</h4>
     <mat-table [dataSource]="dataSource" >
       <!-- Position Column -->
       <ng-container matColumnDef="id">
@@ -74,7 +74,7 @@
 
   <button mat-raised-button color="primary" routerLink="/weapons">Back</button>
   <button mat-raised-button color="primary" (click)="showMonsters()">Add appropriate monster</button>
-  <button mat-raised-button color="primary" (click)="updateWeapon(name.value, weaponType, range.value, magazineCapacity.value)">Update weapon</button>
+  <button *ngIf="isAdmin" mat-raised-button color="primary" (click)="updateWeapon(name.value, weaponType, range.value, magazineCapacity.value)">Update weapon</button>
 
 
 </mat-card>

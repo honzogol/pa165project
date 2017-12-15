@@ -17,7 +17,7 @@ export class MonsterDetailComponent implements OnInit {
   monster: Monster;
   selectedAgility: string;
   cookie: boolean = false;
-
+  isAdmin: boolean = false;
 
   constructor(private http: HttpClient, private route: ActivatedRoute, private cookieService: CookieService, private router: Router) {
     this.route.params.subscribe(res => this.monsterId = res.id);
@@ -25,7 +25,16 @@ export class MonsterDetailComponent implements OnInit {
 
   ngOnInit() {
     this.cookie = this.cookieService.check('creatures-token');
+    this.checkIsAdminCookie()
     this.loadData();
+  }
+
+  checkIsAdminCookie(){
+    if (this.cookieService.get('creatures-is_admin') == "true"){
+      this.isAdmin = true;
+      return;
+    }
+    this.isAdmin = false;
   }
 
   checkIfCookieExist(){
