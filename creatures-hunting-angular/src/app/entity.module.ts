@@ -24,3 +24,10 @@ export interface User {
   email: string;
   role: string;
 }
+
+export interface Area {
+  id: number;
+  name: string;
+  type: string;
+  monsters: Monster[];
+}

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { HttpClient } from '@angular/common/http';
 import { Weapon } from '../../entity.module';
+import {Router} from "@angular/router";
+import {CookieService} from "ngx-cookie-service";
 
 @Component({
   selector: 'app-weapons',
@@ -14,38 +16,49 @@ export class WeaponsComponent implements OnInit {
   showWeapons : boolean = false;
   weapons : Weapon[] = [];
   dataSource : MatTableDataSource<Weapon>;
+  cookie: boolean = false;
 
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private cookieService: CookieService, private router: Router) {}
 
   ngOnInit() {
+    this.cookie = this.cookieService.check('creatures-token');
     this.loadWeapons();
   }
 
+  checkIfCookieExist(){
+    if (!this.cookie){
+      alert("You must log in.");
+      this.router.navigate(['/login']);
+    }
+  }
+
   loadWeapons(){
+    this.cookie = this.cookieService.check('creatures-token');
+    this.checkIfCookieExist();
     this.http.get<Weapon[]>('http://localhost:8080/pa165/rest/auth/weapons/', {withCredentials: true}).subscribe(
       data => {
         this.weapons = data;
         this.dataSource = new MatTableDataSource(this.weapons);
-        console.log('Weapons loaded');
-        console.log(data);
+        console.log('Weapons loaded:\n' + data);
         this.showWeapons = true;
       },
       error => {
-        console.log(error);
-        alert(error.message);
+        console.log("Error during loading weapons.\n" + error);
       }
     );
   }
 
   removeWeapon(id){
-    this.http.delete('http://localhost:8080/pa165/rest/weapons/delete/' + id ,  {responseType: 'text'}).subscribe(
+    this.cookie = this.cookieService.check('creatures-token');
+    this.checkIfCookieExist();
+    this.http.delete('http://localhost:8080/pa165/rest/auth/weapons/delete/' + id ,  {responseType: 'text', withCredentials: true}).subscribe(
       data => {
         this.loadWeapons();
+        console.log("Removing weapon with id: " + id +"was successful.");
       },
       error => {
-        console.log(error);
-        alert(error.message);
+        console.log("Error during removing weapon with id: " + id +".");
       }
     );
   }

@@ -104,9 +104,10 @@ public class AuthController {
 		if (authCookie == null || isAdminCookie == null) {
 			return false;
 		}
-
+		authCookie.setPath("/");
 		authCookie.setMaxAge(0);
 		isAdminCookie.setMaxAge(0);
+		isAdminCookie.setPath("/");
 		response.addCookie(authCookie);
 		response.addCookie(isAdminCookie);
 		return true;

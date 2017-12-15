@@ -22,7 +22,7 @@ public class SecurityUtils {
 	public static final String INIT_VECTOR;
 	public static final String KEY;
 	public static final String AUTHENTICATE_USER = "authenticatedUser";
-	public static final int COOKIE_AGE = -1;
+	public static final int COOKIE_AGE = 60*60*1000;
 
 	static {
 		try(InputStream input = SecurityUtils.class.getResourceAsStream("/server.properties")) {
@@ -41,6 +41,7 @@ public class SecurityUtils {
 
 		Cookie cookie = new Cookie(IS_ADMIN_COOKIE, value);
 		cookie.setMaxAge(COOKIE_AGE);
+		cookie.setPath("/");
 		cookie.setHttpOnly(false);
 		return cookie;
 	}
@@ -50,6 +51,7 @@ public class SecurityUtils {
 
 		String token = encrypt(KEY, INIT_VECTOR, userData);
 		Cookie cookie = new Cookie(AUTH_COOKIE, token);
+		cookie.setPath("/");
 		cookie.setMaxAge(COOKIE_AGE);
 		cookie.setHttpOnly(false);
 		return cookie;

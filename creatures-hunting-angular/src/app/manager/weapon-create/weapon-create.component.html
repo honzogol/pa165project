@@ -1,34 +1,32 @@
 <mat-card class="main-card mat-elevation-z4" >
   <div>
-    <div>
-      <mat-form-field>
-        <input matInput #name  placeholder="Name" >
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field>
-        <mat-select placeholder="Type" [(value)]="weaponType">
-          <mat-option value="PISTOL">Pistol</mat-option>
-          <mat-option value="RIFLE">Rifle</mat-option>
-          <mat-option value="SHOTGUN">Shotgun</mat-option>
-          <mat-option value="OTHER">Other</mat-option>
-          <mat-option >Not selected</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-
-    <div>
-      <mat-form-field>
-        <input matInput #range placeholder="Range" >
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field>
-        <input matInput #magazineCapacity placeholder="Magazine Capacity" >
-      </mat-form-field>
-    </div>
-
+    <mat-form-field>
+      <input matInput #name  placeholder="Name" >
+    </mat-form-field>
   </div>
+  <div>
+    <mat-form-field>
+      <mat-select placeholder="Type" [(value)]="weaponType">
+        <mat-option value="PISTOL">Pistol</mat-option>
+        <mat-option value="RIFLE">Rifle</mat-option>
+        <mat-option value="SHOTGUN">Shotgun</mat-option>
+        <mat-option value="OTHER">Other</mat-option>
+        <mat-option >Not selected</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field>
+      <input matInput #range placeholder="Range" >
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field>
+      <input matInput #magazineCapacity placeholder="Magazine Capacity" >
+    </mat-form-field>
+  </div>
+
   <button mat-raised-button color="primary" routerLink="/weapons">Back</button>
   <button mat-raised-button color="primary" (click)="createWeapon(name.value, weaponType, range.value,magazineCapacity.value)">Create</button>
 

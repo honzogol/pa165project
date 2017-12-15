@@ -20,15 +20,25 @@
       <mat-cell *matCellDef="let monster"> {{monster.agility}} </mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="height">
+      <mat-header-cell *matHeaderCellDef> Height </mat-header-cell>
+      <mat-cell *matCellDef="let monster"> {{monster.height}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="weight">
+      <mat-header-cell *matHeaderCellDef> Weight </mat-header-cell>
+      <mat-cell *matCellDef="let monster"> {{monster.weight}} </mat-cell>
+    </ng-container>
+
     <ng-container matColumnDef="edit">
-      <mat-header-cell *matHeaderCellDef> Edit </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>  </mat-header-cell>
       <mat-cell *matCellDef="let monster">
         <button mat-button color="primary" routerLink="{{monster.id}}">Detail</button>
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="remove">
-      <mat-header-cell *matHeaderCellDef> Remove </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>  </mat-header-cell>
       <mat-cell *matCellDef="let monster">
         <button mat-button color="warn" (click)="removeMonster(monster.id)">Remove</button>
       </mat-cell>

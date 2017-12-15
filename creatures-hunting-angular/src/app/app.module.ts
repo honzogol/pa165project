@@ -23,6 +23,7 @@ import {UserCreateComponent} from "./manager/user-create/user-create.component";
 import {AreaCreateComponent} from "./manager/area-create/area-create.component";
 import {AreaDetailComponent} from "./manager/area-detail/area-detail.component";
 import {AreasComponent} from "./manager/areas/areas.component";
+import {CookieService} from "ngx-cookie-service";
 
 
 @NgModule({
@@ -51,7 +52,7 @@ import {AreasComponent} from "./manager/areas/areas.component";
     MaterialModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -31,14 +31,14 @@
     </ng-container>
 
     <ng-container matColumnDef="delete">
-      <mat-header-cell *matHeaderCellDef> Delete </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>  </mat-header-cell>
       <mat-cell *matCellDef="let user">
         <button mat-button color="warn" (click)="deleteUser(user.id)">Delete</button>
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="switchRole">
-      <mat-header-cell *matHeaderCellDef> Switch Role </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef>  </mat-header-cell>
       <mat-cell *matCellDef="let user">
         <button mat-button color="warn" (click)="switchRole(user.id, user.role)">Switch</button>
       </mat-cell>

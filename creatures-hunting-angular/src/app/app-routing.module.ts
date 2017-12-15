@@ -27,7 +27,7 @@ const routes: Routes = [
     component: ManagerComponent,
     children: [
       {
-        path: 'home',
+        path: '',
         component: HomeComponent
       },
       {
