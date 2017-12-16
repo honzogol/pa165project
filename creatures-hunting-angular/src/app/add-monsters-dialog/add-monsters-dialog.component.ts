@@ -18,6 +18,7 @@ export class AddMonstersComponent implements OnInit {
   cookie: boolean = false;
   weapon: Weapon;
   empty: boolean = true;
+  showMonsters: boolean = false;
 
   constructor(public dialogRef: MatDialogRef<AddMonstersComponent>,
               private cookieService: CookieService,
@@ -38,6 +39,7 @@ export class AddMonstersComponent implements OnInit {
   }
 
   loadData() {
+    this.showMonsters = false;
     this.http.get<Monster[]>('http://localhost:8080/pa165/rest/auth/monsters/', {withCredentials: true}).subscribe(
       data => {
         this.monsterCandidates = data;
@@ -53,6 +55,7 @@ export class AddMonstersComponent implements OnInit {
         console.log("Monsters size: " + this.monsterCandidates.length);
         this.dataSourceMonsters = new MatTableDataSource(this.monsterCandidates);
         this.empty = this.monsterCandidates.length == 0;
+        this.showMonsters = true;
       });
   }
 

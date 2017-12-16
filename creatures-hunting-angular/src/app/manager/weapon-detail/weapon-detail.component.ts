@@ -56,6 +56,7 @@ export class WeaponDetailComponent implements OnInit {
   }
 
   loadData(){
+    this.showWeapon = false;
     this.cookie = this.cookieService.check('creatures-token');
     this.checkIfCookieExist();
     this.http.get<Weapon>('http://localhost:8080/pa165/rest/auth/weapons/' + this.weaponId, {withCredentials: true}).subscribe(
@@ -66,6 +67,7 @@ export class WeaponDetailComponent implements OnInit {
         this.weaponType = data.type == null ? 'null' : data.type;
         this.appropriateMonsters = data.appropriateMonsters;
         this.dataSource = new MatTableDataSource(this.appropriateMonsters);
+        this.showWeapon = true;
       });
   }
 

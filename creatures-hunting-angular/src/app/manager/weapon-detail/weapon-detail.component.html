@@ -32,8 +32,8 @@
       </mat-form-field>
     </div>
 
+    <button *ngIf="isAdmin" mat-raised-button color="primary" (click)="updateWeapon(name.value, weaponType, range.value, magazineCapacity.value)">Update</button>
     <button mat-raised-button color="primary" (click)="showMonsters()">Add appropriate monster</button>
-    <button *ngIf="isAdmin" mat-raised-button color="primary" (click)="updateWeapon(name.value, weaponType, range.value, magazineCapacity.value)">Update weapon</button>
 
 
     <h4>This weapon is good against:</h4>

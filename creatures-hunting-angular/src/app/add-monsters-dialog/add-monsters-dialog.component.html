@@ -1,6 +1,7 @@
 <h4>All monsters:</h4>
 <div class="scrollable">
-  <mat-table [dataSource]="dataSourceMonsters" >
+  <mat-spinner [style.display]="!showMonsters ? 'block' : 'none'" class="center"></mat-spinner>
+  <mat-table [dataSource]="dataSourceMonsters" *ngIf="showMonsters">
 
       <!-- Name Column -->
     <ng-container matColumnDef="name">
