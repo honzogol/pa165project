@@ -26,6 +26,8 @@ import {AreasComponent} from "./manager/areas/areas.component";
 import {CookieService} from "ngx-cookie-service";
 import {CookieLawModule} from "angular2-cookie-law";
 import { AddMonstersComponent } from './add-monsters-dialog/add-monsters-dialog.component';
+import {MatStepperModule} from "@angular/material";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -55,6 +57,9 @@ import { AddMonstersComponent } from './add-monsters-dialog/add-monsters-dialog.
     BrowserAnimationsModule,
     MaterialModule,
     HttpClientModule,
+    MatStepperModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   entryComponents: [
     AddMonstersComponent,

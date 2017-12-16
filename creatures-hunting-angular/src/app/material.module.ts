@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
-import {
-  MatButtonModule, MatToolbarModule, MatCardModule, MatGridListModule,
-  MatTableModule, MatFormFieldModule, MatProgressSpinnerModule, MatInputModule, MatOptionModule, MatSelectModule,
-  MatDialogModule
-} from '@angular/material';
+import { MatButtonModule, MatToolbarModule, MatCardModule, MatGridListModule,
+  MatTableModule, MatFormFieldModule, MatProgressSpinnerModule, MatInputModule, MatOptionModule, MatSelectModule, MatStepperModule, MatDialogModule } from '@angular/material';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   imports: [
@@ -19,6 +17,7 @@ import {
     MatInputModule,
     MatOptionModule,
     MatSelectModule,
+    MatStepperModule,
   ],
 
   exports: [
@@ -33,6 +32,8 @@ import {
     MatInputModule,
     MatOptionModule,
     MatSelectModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
 })
 
