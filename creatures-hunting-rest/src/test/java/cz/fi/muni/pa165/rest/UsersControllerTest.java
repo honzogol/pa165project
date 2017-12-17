@@ -92,7 +92,7 @@ public class UsersControllerTest {
 
 	@BeforeMethod
 	public void setUpResolver() {
-		when(roleResolver.isSelf(any(), any())).thenReturn(true);
+		when(roleResolver.isSelf(any(), any())).thenReturn(false);
 		when(roleResolver.hasRole(any(), any())).thenReturn(true);
 	}
 
