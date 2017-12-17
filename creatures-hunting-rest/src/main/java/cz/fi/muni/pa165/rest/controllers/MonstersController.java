@@ -4,11 +4,14 @@ import cz.fi.muni.pa165.dto.MonsterCreateDTO;
 import cz.fi.muni.pa165.dto.MonsterDTO;
 import cz.fi.muni.pa165.dto.MonsterUpdateDTO;
 import cz.fi.muni.pa165.enums.MonsterAgility;
+import cz.fi.muni.pa165.enums.UserRole;
 import cz.fi.muni.pa165.facade.MonsterFacade;
 import cz.fi.muni.pa165.rest.ApiUris;
 import cz.fi.muni.pa165.rest.exceptions.InvalidParameterException;
+import cz.fi.muni.pa165.rest.exceptions.PrivilegeException;
 import cz.fi.muni.pa165.rest.exceptions.ResourceAlreadyExistingException;
 import cz.fi.muni.pa165.rest.exceptions.ResourceNotFoundException;
+import cz.fi.muni.pa165.rest.security.RoleResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -31,10 +35,12 @@ public class MonstersController {
 	private final static Logger log = LoggerFactory.getLogger(MonstersController.class);
 
 	private final MonsterFacade monsterFacade;
+	private final RoleResolver roleResolver;
 
 	@Inject
-	public MonstersController(MonsterFacade monsterFacade) {
+	public MonstersController(MonsterFacade monsterFacade, RoleResolver roleResolver) {
 		this.monsterFacade = monsterFacade;
+		this.roleResolver = roleResolver;
 	}
 
 	/**
@@ -62,9 +68,13 @@ public class MonstersController {
 	 */
 	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public final MonsterDTO createMonster(@RequestBody MonsterCreateDTO monster) {
+	public final MonsterDTO createMonster(@RequestBody MonsterCreateDTO monster, HttpServletRequest request) {
 
 		log.debug("rest createMonster({})", monster);
+
+		if(!roleResolver.hasRole(request, UserRole.ADMIN)) {
+			throw new PrivilegeException("Not permitted.");
+		}
 
 		MonsterDTO monsterWithSameName = monsterFacade.findByName(monster.getName());
 		if(monsterWithSameName != null) {
@@ -83,9 +93,13 @@ public class MonstersController {
 	 * @throws ResourceNotFoundException when monster with given ID wasn't found
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public final void deleteMonster(@PathVariable("id") long id) {
+	public final void deleteMonster(@PathVariable("id") long id, HttpServletRequest request) {
 
 		log.debug("rest deleteMonster({})", id);
+
+		if(!roleResolver.hasRole(request, UserRole.ADMIN)) {
+			throw new PrivilegeException("Not permitted.");
+		}
 
 		try {
 			monsterFacade.deleteMonster(id);
@@ -111,9 +125,15 @@ public class MonstersController {
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public final MonsterDTO updateMonster(@PathVariable("id") long id, @RequestBody MonsterUpdateDTO monsterUpdate) {
+	public final MonsterDTO updateMonster(@PathVariable("id") long id,
+	                                      @RequestBody MonsterUpdateDTO monsterUpdate,
+	                                      HttpServletRequest request) {
 
 		monsterUpdate.setId(id);
+
+		if(!roleResolver.hasRole(request, UserRole.ADMIN)) {
+			throw new PrivilegeException("Not permitted.");
+		}
 
 		log.debug("rest updateMonster({})", monsterUpdate);
 
@@ -138,7 +158,8 @@ public class MonstersController {
 	 * @param agility agility that will be used for search
 	 * @return List of MonsterDTO with given agility
 	 */
-	@RequestMapping(value = "/filter/agility/{agility}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/filter/agility/{agility}", method = RequestMethod.GET,
+			produces = MediaType.APPLICATION_JSON_VALUE)
 	public final List<MonsterDTO> getAllForAgility(@PathVariable("agility") MonsterAgility agility) {
 
 		log.debug("rest getAllForAgility({})", agility);

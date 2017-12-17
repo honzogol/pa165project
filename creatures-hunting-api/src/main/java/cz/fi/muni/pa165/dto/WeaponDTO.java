@@ -46,6 +46,10 @@ public class WeaponDTO {
         return appropriateMonsters;
     }
 
+    public void setAppropriateMonsters(Set<MonsterDTO> appropriateMonsters) {
+        this.appropriateMonsters = appropriateMonsters;
+    }
+
     public void addAppropriateMonster(MonsterDTO monsterDTO){
         appropriateMonsters.add(monsterDTO);
     }

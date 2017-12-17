@@ -3,6 +3,8 @@ package cz.fi.muni.pa165.rest.controllers;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import cz.fi.muni.pa165.rest.ApiError;
 import cz.fi.muni.pa165.rest.exceptions.InvalidParameterException;
+import cz.fi.muni.pa165.rest.exceptions.NotAuthorizedException;
+import cz.fi.muni.pa165.rest.exceptions.PrivilegeException;
 import cz.fi.muni.pa165.rest.exceptions.ResourceAlreadyExistingException;
 import cz.fi.muni.pa165.rest.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.Collections;
 
@@ -61,6 +64,33 @@ public class GlobalExceptionController {
 	@ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
 	@ResponseBody
 	public ApiError handleException(InvalidFormatException e) {
+		ApiError apiError = new ApiError();
+		apiError.setErrors(Collections.singletonList(e.getMessage()));
+		return apiError;
+	}
+
+	@ExceptionHandler
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	@ResponseBody
+	public ApiError handleException(NotAuthorizedException e) {
+		ApiError apiError = new ApiError();
+		apiError.setErrors(Collections.singletonList(e.getMessage()));
+		return apiError;
+	}
+
+	@ExceptionHandler
+	@ResponseStatus(HttpStatus.FORBIDDEN)
+	@ResponseBody
+	public ApiError handleException(PrivilegeException e) {
+		ApiError apiError = new ApiError();
+		apiError.setErrors(Collections.singletonList(e.getMessage()));
+		return apiError;
+	}
+
+	@ExceptionHandler
+	@ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+	@ResponseBody
+	public ApiError handleException(MethodArgumentTypeMismatchException e) {
 		ApiError apiError = new ApiError();
 		apiError.setErrors(Collections.singletonList(e.getMessage()));
 		return apiError;

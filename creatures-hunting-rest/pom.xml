@@ -94,5 +94,10 @@
             <artifactId>javax.el</artifactId>
             <scope>test</scope> <!-- conflicts with tomcat libraries, but needed for tests to run -->
         </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.9</version>
+        </dependency>
     </dependencies>
 </project>

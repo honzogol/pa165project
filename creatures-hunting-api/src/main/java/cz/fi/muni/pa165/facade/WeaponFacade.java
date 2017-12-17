@@ -2,6 +2,7 @@ package cz.fi.muni.pa165.facade;
 
 import cz.fi.muni.pa165.dto.WeaponCreateDTO;
 import cz.fi.muni.pa165.dto.WeaponDTO;
+import cz.fi.muni.pa165.dto.WeaponUpdateDTO;
 import cz.fi.muni.pa165.enums.WeaponType;
 
 import java.util.List;
@@ -27,6 +28,13 @@ public interface WeaponFacade {
      * @param weaponId Id for weapon entity to be create
      */
     void deleteWeapon(Long weaponId);
+
+    /**
+     * Finds weapon with the same id and update their attributes
+     * @param weaponUpdateDTO WeaponUpdateDTO with new attributes
+     * @return WeaponDTO
+     */
+    WeaponDTO updateWeapon(WeaponUpdateDTO weaponUpdateDTO);
 
     /**
      * Finds weapon by Id.

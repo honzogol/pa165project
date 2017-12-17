@@ -43,6 +43,10 @@ public class AreaDTO {
     public Set<MonsterDTO> getMonsters() {
         return monsters;
     }
+    
+    public void setMonsters(Set<MonsterDTO> monsters){
+        this.monsters = monsters;
+    }
 
     public void addMonster(MonsterDTO monsterDTO) {
         monsters.add(monsterDTO);

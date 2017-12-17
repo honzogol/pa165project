@@ -9,6 +9,10 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.io.IOException;
 
+/**
+ * @author Vojtech Sassmann &lt;vojtech.sassmann@gmail.com&gt;
+ * @author Pavel Vyskocil <vyskocilpavel@muni.cz>
+ */
 @Configuration
 @Import(ServiceConfiguration.class)
 @ComponentScan(basePackageClasses = {SampleDataLoadingFacadeImpl.class})
@@ -24,6 +28,10 @@ public class AppWithSampleDataConfiguration {
 
 	@PostConstruct
 	public void dataLoading() throws IOException {
-		sampleDataLoadingFacade.loadData();
+		sampleDataLoadingFacade.loadMonsterData();
+		sampleDataLoadingFacade.loadWeaponData();
+		sampleDataLoadingFacade.loadAreaData();
+		sampleDataLoadingFacade.loadUserData();
+
 	}
 }

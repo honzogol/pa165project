@@ -57,13 +57,13 @@ public class AreaFacadeImpl implements AreaFacade {
 
         area.setName(update.getName());
         area.setType(update.getType());
-        area.setSomeHowSetOfMonsters
 
         return beanMappingService.mapTo(area, AreaDTO.class);
     }
 
     @Override
-    public List<MonsterDTO> getTheMostDangerousAreas() {
+
+    public List<AreaDTO> getTheMostDangerousAreas() {
         return beanMappingService.mapTo(areaService.getTheMostDangerousAreas(), AreaDTO.class);
     }
 

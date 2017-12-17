@@ -1,0 +1,18 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row  role="heading" class="">
+    <span>{{ title }}</span>
+
+    <span class="spacer"></span>
+
+    <div>
+      <button mat-button routerLink="">Home</button>
+      <button mat-button routerLink="/users" *ngIf="cookieIsAdmin">Users</button>
+      <button mat-button routerLink="/monsters">Monsters</button>
+      <button mat-button routerLink="/weapons">Weapons</button>
+      <button mat-button routerLink="/areas">Areas</button>
+    </div>
+    <button class="logout" mat-button (click)="logout()">Logout</button>
+  </mat-toolbar-row>
+</mat-toolbar>
+<router-outlet></router-outlet>
+<cookie-law></cookie-law>

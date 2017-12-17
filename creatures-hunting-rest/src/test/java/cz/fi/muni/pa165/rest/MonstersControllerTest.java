@@ -9,6 +9,7 @@ import cz.fi.muni.pa165.enums.MonsterAgility;
 import cz.fi.muni.pa165.facade.MonsterFacade;
 import cz.fi.muni.pa165.rest.controllers.GlobalExceptionController;
 import cz.fi.muni.pa165.rest.controllers.MonstersController;
+import cz.fi.muni.pa165.rest.security.RoleResolver;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
@@ -19,6 +20,7 @@ import org.springframework.web.method.annotation.ExceptionHandlerMethodResolver;
 import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
 import org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -27,6 +29,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -49,9 +52,10 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 public class MonstersControllerTest {
 
 	private MonsterFacade monsterFacade = mock(MonsterFacade.class);
+	private RoleResolver roleResolver = mock(RoleResolver.class);
 
 	@InjectMocks
-	private MonstersController monstersController = new MonstersController(monsterFacade);
+	private MonstersController monstersController = new MonstersController(monsterFacade, roleResolver);
 
 	private MockMvc mockMvc;
 
@@ -64,11 +68,17 @@ public class MonstersControllerTest {
 				.build();
 	}
 
+	@BeforeMethod
+	public void setUpResolver() {
+		when(roleResolver.isSelf(any(), any())).thenReturn(true);
+		when(roleResolver.hasRole(any(), any())).thenReturn(true);
+	}
+
 	@Test
 	public void debugTest() throws Exception {
 		doReturn(Collections.unmodifiableList(this.createMonsters())).when(
 				monsterFacade).getAllMonsters();
-		mockMvc.perform(get("/monsters")).andDo(print());
+		mockMvc.perform(get("/auth/monsters")).andDo(print());
 	}
 
 	@Test
@@ -77,7 +87,7 @@ public class MonstersControllerTest {
 		doReturn(Collections.unmodifiableList(this.createMonsters())).when(
 				monsterFacade).getAllMonsters();
 
-		mockMvc.perform(get("/monsters"))
+		mockMvc.perform(get("/auth/monsters"))
 				.andExpect(status().isOk())
 				.andExpect(
 						content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
@@ -100,7 +110,7 @@ public class MonstersControllerTest {
 		String json = convertObjectToJsonBytes(monsterCreateDTO);
 
 		mockMvc.perform(
-				post("/monsters/create").contentType(MediaType.APPLICATION_JSON_VALUE)
+				post("/auth/monsters/create").contentType(MediaType.APPLICATION_JSON_VALUE)
 				.content(json))
 				.andExpect(status().isOk());
 
@@ -109,7 +119,7 @@ public class MonstersControllerTest {
 	@Test
 	public void testDeleteMonster() throws Exception {
 
-		mockMvc.perform(delete("/monsters/1"))
+		mockMvc.perform(delete("/auth/monsters/1"))
 				.andExpect(status().isOk());
 
 		verify(monsterFacade, times(1)).deleteMonster(1L);
@@ -120,7 +130,7 @@ public class MonstersControllerTest {
 
 		doThrow(new RuntimeException("the product does not exist")).when(monsterFacade).deleteMonster(1L);
 
-		mockMvc.perform(delete("/monsters/1"))
+		mockMvc.perform(delete("/auth/monsters/1"))
 				.andExpect(status().isNotFound());
 	}
 
@@ -145,7 +155,7 @@ public class MonstersControllerTest {
 
 		String json = convertObjectToJsonBytes(updateDTO);
 
-		mockMvc.perform(put("/monsters/1")
+		mockMvc.perform(put("/auth/monsters/1")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(json))
 				.andExpect(status().isOk())
@@ -160,7 +170,7 @@ public class MonstersControllerTest {
 		List<MonsterDTO> monsters = createMonsters();
 		when(monsterFacade.getAllForAgility(MonsterAgility.SLOW)).thenReturn(Arrays.asList(monsters.get(0), monsters.get(1)));
 
-		mockMvc.perform(get("/monsters/filter/agility/SLOW"))
+		mockMvc.perform(get("/auth/monsters/filter/agility/SLOW"))
 				.andExpect(jsonPath("$.[?(@.id==1)].name").value("Zombie"))
 				.andExpect(jsonPath("$.[?(@.id==2)].name").value("Chicken"));
 	}
@@ -172,7 +182,7 @@ public class MonstersControllerTest {
 
 		when(monsterFacade.findById(1L)).thenReturn(monsters.get(0));
 
-		mockMvc.perform(get("/monsters/1"))
+		mockMvc.perform(get("/auth/monsters/1"))
 				.andExpect(jsonPath("$.[?(@.id==1)].name").value("Zombie"));
 	}
 
@@ -183,7 +193,7 @@ public class MonstersControllerTest {
 
 		when(monsterFacade.findByName("Zombie")).thenReturn(monsters.get(0));
 
-		mockMvc.perform(get("/monsters/filter/name/Zombie"))
+		mockMvc.perform(get("/auth/monsters/filter/name/Zombie"))
 				.andExpect(jsonPath("$.[?(@.id==1)].name").value("Zombie"));
 	}
 
@@ -194,7 +204,7 @@ public class MonstersControllerTest {
 
 		when(monsterFacade.getTheMostWidespreadMonsters()).thenReturn(monsters);
 
-		mockMvc.perform(get("/monsters/filter/mostWidespread"))
+		mockMvc.perform(get("/auth/monsters/filter/mostWidespread"))
 				.andExpect(jsonPath("$.[?(@.id==1)].name").value("Zombie"))
 				.andExpect(jsonPath("$.[?(@.id==2)].name").value("Chicken"))
 				.andExpect(jsonPath("$.[?(@.id==3)].name").value("Spider"));

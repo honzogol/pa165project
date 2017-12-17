@@ -2,7 +2,7 @@ package cz.fi.muni.pa165.service.facade;
 
 import cz.fi.muni.pa165.dto.WeaponCreateDTO;
 import cz.fi.muni.pa165.dto.WeaponDTO;
-import cz.fi.muni.pa165.entity.Monster;
+import cz.fi.muni.pa165.dto.WeaponUpdateDTO;
 import cz.fi.muni.pa165.entity.Weapon;
 import cz.fi.muni.pa165.enums.WeaponType;
 import cz.fi.muni.pa165.facade.WeaponFacade;
@@ -42,6 +42,21 @@ public class WeaponFacadeImpl implements WeaponFacade{
         Weapon mappedWeapon = beanMappingService.mapTo(weapon, Weapon.class);
         weaponService.createWeapon(mappedWeapon);
         return mappedWeapon.getId();
+    }
+
+    @Override
+    public WeaponDTO updateWeapon(WeaponUpdateDTO weaponUpdateDTO) {
+        Weapon weapon = weaponService.findById(weaponUpdateDTO.getId());
+
+
+        if (weapon == null){
+            return null;
+        }
+        weapon.setType(weaponUpdateDTO.getType());
+        weapon.setMagazineCapacity(weaponUpdateDTO.getMagazineCapacity());
+        weapon.setName(weaponUpdateDTO.getName());
+        weapon.setRange(weaponUpdateDTO.getRange());
+        return beanMappingService.mapTo(weapon, WeaponDTO.class);
     }
 
     @Override
