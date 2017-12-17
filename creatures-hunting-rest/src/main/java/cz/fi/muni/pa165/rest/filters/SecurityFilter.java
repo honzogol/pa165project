@@ -11,6 +11,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 
 import cz.fi.muni.pa165.dto.UserDTO;
@@ -31,6 +32,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 		ApiUris.ROOT_AUTH + "/users/*"})
 public class SecurityFilter implements Filter {
 
+	private static final String LOGIN_ERROR_MESSAGE = "{\"errors\":[\"User is not logged in.\"]}";
+
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -41,6 +44,7 @@ public class SecurityFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
 		HttpServletResponse response = (HttpServletResponse) servletResponse;
 
+
 		if (request.getMethod().equals("OPTIONS")) {
 			filterChain.doFilter(request, response);
 			return;
@@ -50,7 +54,7 @@ public class SecurityFilter implements Filter {
 
 		if (cookies == null) {
 			filterChain.doFilter(request, response);
-			response.sendError(401, "Not logged in.");
+			sendUnauthError(response);
 			return;
 		}
 
@@ -64,14 +68,14 @@ public class SecurityFilter implements Filter {
 
 		if (token == null) {
 			filterChain.doFilter(request, response);
-			response.sendError(401, "Not logged in.");
+			sendUnauthError(response);
 			return;
 		}
 
 		String[] data = token.split(";", 2);
 		if (data.length != 2) {
 			filterChain.doFilter(request, response);
-			response.sendError(401, "Not logged in.");
+			sendUnauthError(response);
 			return;
 		}
 
@@ -82,7 +86,7 @@ public class SecurityFilter implements Filter {
 			id = Long.parseLong(data[0]);
 		} catch (NumberFormatException e) {
 			filterChain.doFilter(request, response);
-			response.sendError(401, "Not logged in.");
+			sendUnauthError(response);
 			return;
 		}
 		email = data[1];
@@ -94,13 +98,20 @@ public class SecurityFilter implements Filter {
 		UserDTO user = userFacade.findUserById(id);
 		if (!user.getEmail().equals(email)) {
 			filterChain.doFilter(request, response);
-			response.sendError(401, "Not logged in.");
+			sendUnauthError(response);
 			return;
 		}
 
 		request.setAttribute(SecurityUtils.AUTHENTICATE_USER, user);
 
 		filterChain.doFilter(request, response);
+	}
+
+	private void sendUnauthError(HttpServletResponse response) throws IOException {
+		response.setContentType("application/json");
+		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		PrintWriter out = response.getWriter();
+		out.print(LOGIN_ERROR_MESSAGE);
 	}
 
 	@Override

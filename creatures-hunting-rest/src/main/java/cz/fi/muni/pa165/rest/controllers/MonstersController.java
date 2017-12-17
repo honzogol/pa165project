@@ -45,7 +45,7 @@ public class MonstersController {
 
 	/**
 	 * Get list of Monsters curl -i -X GET
-	 * http://localhost:8080/pa165/rest/monsters
+	 * http://localhost:8080/pa165/rest/auth/monsters
 	 *
 	 * @return List<MonsterDTO>
 	 */
@@ -60,7 +60,7 @@ public class MonstersController {
 	 * Create a new Monster by POST method
 	 * curl -X POST -i -H "Content-Type: application/json" --data
 	 * '{"name":"test","height":155.2,"weight":70.5,"agility":"SLOW"}'
-	 * http://localhost:8080/pa165/rest/monsters/create
+	 * http://localhost:8080/pa165/rest/auth/monsters/create
 	 *
 	 * @param monster MonsterCreateDTO with required fields for creation
 	 * @return the created monster MonsterDTO
@@ -78,7 +78,7 @@ public class MonstersController {
 
 		MonsterDTO monsterWithSameName = monsterFacade.findByName(monster.getName());
 		if(monsterWithSameName != null) {
-			throw new ResourceAlreadyExistingException("Resource is already existing.");
+			throw new ResourceAlreadyExistingException("Zombie with given name is already existing.");
 		} else {
 			Long id = monsterFacade.createMonster(monster);
 			return monsterFacade.findById(id);
@@ -87,7 +87,7 @@ public class MonstersController {
 
 	/**
 	 * Delete one monster by id curl -i -X DELETE
-	 * http://localhost:8080/pa165/rest/monsters/1
+	 * http://localhost:8080/pa165/rest/auth/monsters/1
 	 *
 	 * @param id identifier of monster
 	 * @throws ResourceNotFoundException when monster with given ID wasn't found
@@ -104,7 +104,7 @@ public class MonstersController {
 		try {
 			monsterFacade.deleteMonster(id);
 		} catch (Exception e) {
-			throw new ResourceNotFoundException("Resource not found.");
+			throw new ResourceNotFoundException("Zombie not found");
 		}
 	}
 
@@ -115,7 +115,7 @@ public class MonstersController {
 	 * curl -i -X PUT -H
 	 * "Content-Type: application/json" --data '{"agility": "FAST",
 	 * "name": "Zidan", "height": 160.2, "weight": 40.2}'
-	 * http://localhost:8080/pa165/rest/monsters/1
+	 * http://localhost:8080/pa165/rest/auth/monsters/1
 	 *
 	 * @param id identified of the monster to be updated
 	 * @param monsterUpdate required fields as specified in MonsterUpdateDTO except id
@@ -144,7 +144,7 @@ public class MonstersController {
 		MonsterDTO updatedMonster = monsterFacade.updateMonster(monsterUpdate);
 
 		if (updatedMonster == null) {
-			throw new ResourceNotFoundException("Resource not found.");
+			throw new ResourceNotFoundException("Zombie not found.");
 		}
 
 		return updatedMonster;
@@ -153,7 +153,7 @@ public class MonstersController {
 	/**
 	 * Gets all monsters with given agility by GET method
 	 * curl -i -X GET
-	 * http://localhost:8080/pa165/rest/monsters/filter/agility/SLOW
+	 * http://localhost:8080/pa165/rest/auth/monsters/filter/agility/SLOW
 	 *
 	 * @param agility agility that will be used for search
 	 * @return List of MonsterDTO with given agility
@@ -174,7 +174,7 @@ public class MonstersController {
 	/**
 	 *
 	 * Get Monster by identifier id curl -i -X GET
-	 * http://localhost:8080/pa165/rest/monsters/1
+	 * http://localhost:8080/pa165/rest/auth/monsters/1
 	 *
 	 * @param id identifier of monster
 	 * @return MonsterDTO
@@ -188,7 +188,7 @@ public class MonstersController {
 		MonsterDTO monster = monsterFacade.findById(id);
 
 		if (monster == null) {
-			throw new ResourceNotFoundException("Resource not found.");
+			throw new ResourceNotFoundException("Zombie not found.");
 		}
 
 		return monster;
@@ -197,7 +197,7 @@ public class MonstersController {
 	/**
 	 *
 	 * Get Monster by name id curl -i -X GET
-	 * http://localhost:8080/pa165/rest/monsters/filter/name/zombie
+	 * http://localhost:8080/pa165/rest/auth/monsters/filter/name/zombie
 	 *
 	 * @param name name of monster
 	 * @return MonsterDTO
@@ -211,7 +211,7 @@ public class MonstersController {
 		MonsterDTO monster = monsterFacade.findByName(name);
 
 		if (monster == null) {
-			throw new ResourceNotFoundException("Resource not found.");
+			throw new ResourceNotFoundException("Zombie not found.");
 		}
 
 		return monster;
@@ -221,7 +221,7 @@ public class MonstersController {
 	 *
 	 * Get most wideSpread monsters
 	 * curl -i -X GET
-	 * http://localhost:8080/pa165/rest/monsters/filter/mostWidespread
+	 * http://localhost:8080/pa165/rest/auth/monsters/filter/mostWidespread
 	 *
 	 * @return List of MonsterDTO that are the most widespread
 	 */

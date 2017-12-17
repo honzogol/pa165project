@@ -1,8 +1,11 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {CookieService} from "ngx-cookie-service";
 import {ApplicationConfig, CONFIG_TOKEN} from "../../app-config";
+import {AddMonstersComponent} from "../../add-monsters-dialog/add-monsters-dialog.component";
+import {MatDialog} from "@angular/material";
+import {ErrorDialogComponent} from "../../error-dialog/error-dialog.component";
 
 @Component({
   selector: 'app-monster-create',
@@ -18,7 +21,9 @@ export class MonsterCreateComponent implements OnInit {
   constructor(private http: HttpClient,
               private cookieService: CookieService,
               private router: Router,
-              @Inject(CONFIG_TOKEN) private config: ApplicationConfig) {}
+              private dialog: MatDialog,
+              @Inject(CONFIG_TOKEN) private config: ApplicationConfig) {
+  }
 
   ngOnInit() {
     this.cookie = this.cookieService.check('creatures-token');
@@ -27,7 +32,6 @@ export class MonsterCreateComponent implements OnInit {
 
   checkIfCookieExist(){
     if (!this.cookie){
-      alert("You must log in.");
       this.router.navigate(['/login']);
     }
   }
@@ -40,7 +44,7 @@ export class MonsterCreateComponent implements OnInit {
       data => {
         console.log("Creating monster with name: " + name + ", height: " + height + ", weight: "+ weight + "and agility: " + agility + "was successful.");
         this.router.navigate(['monsters']);
-      }, error => {
+      }, (error: HttpErrorResponse) => {
         console.log("Error during creating monster with name: " + name + ", height: " + height + ", weight: "+ weight + "and agility: " + agility + ".");
       }
     );

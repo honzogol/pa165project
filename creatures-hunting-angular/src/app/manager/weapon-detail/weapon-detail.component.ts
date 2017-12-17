@@ -30,7 +30,7 @@ export class WeaponDetailComponent implements OnInit {
               private route: ActivatedRoute,
               private cookieService: CookieService,
               private router: Router,
-              public dialog: MatDialog,
+              private dialog: MatDialog,
               @Inject(CONFIG_TOKEN) private config: ApplicationConfig) {
     this.route.params.subscribe(res => this.weaponId = res.id);
 
@@ -44,7 +44,6 @@ export class WeaponDetailComponent implements OnInit {
 
   checkIfCookieExist(){
     if (!this.cookie){
-      alert("You must log in.");
       this.router.navigate(['/login']);
     }
   }

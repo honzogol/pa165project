@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import {
   MatButtonModule, MatToolbarModule, MatCardModule, MatGridListModule,
   MatTableModule, MatFormFieldModule, MatProgressSpinnerModule, MatInputModule, MatOptionModule, MatSelectModule,
-  MatStepperModule, MatDialogModule, MatIconModule
+  MatStepperModule, MatDialogModule, MatIconModule,
 } from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 

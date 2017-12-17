@@ -1,40 +1,42 @@
-<h4>All monsters:</h4>
-<div class="scrollable">
-  <mat-spinner [style.display]="!showMonsters ? 'block' : 'none'" class="center"></mat-spinner>
-  <mat-table [dataSource]="dataSourceMonsters" *ngIf="showMonsters">
+<div style="font-family: 'Titillium Web',sans-serif;">
+  <h3>Monsters that can be added:</h3>
+  <div class="scrollable">
+    <mat-spinner [style.display]="!showMonsters ? 'block' : 'none'" class="center"></mat-spinner>
+    <mat-table [dataSource]="dataSourceMonsters" *ngIf="showMonsters">
 
-      <!-- Name Column -->
-    <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-      <mat-cell *matCellDef="let monster"> {{monster.name}} </mat-cell>
-    </ng-container>
+        <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+        <mat-cell *matCellDef="let monster"> {{monster.name}} </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="agility">
-      <mat-header-cell *matHeaderCellDef> Agility </mat-header-cell>
-      <mat-cell *matCellDef="let monster"> {{monster.agility}} </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="agility">
+        <mat-header-cell *matHeaderCellDef> Agility </mat-header-cell>
+        <mat-cell *matCellDef="let monster"> {{monster.agility}} </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="weight">
-      <mat-header-cell *matHeaderCellDef> Weight </mat-header-cell>
-      <mat-cell *matCellDef="let monster"> {{monster.weight}} </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="weight">
+        <mat-header-cell *matHeaderCellDef> Weight </mat-header-cell>
+        <mat-cell *matCellDef="let monster"> {{monster.weight}} </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="height">
-      <mat-header-cell *matHeaderCellDef> Height </mat-header-cell>
-      <mat-cell *matCellDef="let monster"> {{monster.height}} </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="height">
+        <mat-header-cell *matHeaderCellDef> Height </mat-header-cell>
+        <mat-cell *matCellDef="let monster"> {{monster.height}} </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="add">
-      <mat-header-cell *matHeaderCellDef>  </mat-header-cell>
-      <mat-cell *matCellDef="let monster">
-        <button mat-button color="warn" (click)="addAppropriateMonster(monster.id)">Add</button>
-      </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="add">
+        <mat-header-cell *matHeaderCellDef>  </mat-header-cell>
+        <mat-cell *matCellDef="let monster">
+          <button mat-button color="warn" (click)="addAppropriateMonster(monster.id)">Add</button>
+        </mat-cell>
+      </ng-container>
 
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns:displayedColumns ;"></mat-row>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns:displayedColumns ;"></mat-row>
 
-  </mat-table>
-  <h3 *ngIf="monsterCandidates.length == 0" >No monster can be added.</h3>
+    </mat-table>
+    <h4 *ngIf="monsterCandidates.length == 0" >No monster can be added.</h4>
+  </div>
 </div>
