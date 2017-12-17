@@ -1,5 +1,7 @@
 package cz.fi.muni.pa165.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import cz.fi.muni.pa165.enums.UserRole;
 
 /**
@@ -49,10 +51,12 @@ public class UserDTO {
 		this.email = email;
 	}
 
+	@JsonIgnore
 	public String getPasswordHash() {
 		return passwordHash;
 	}
 
+	@JsonProperty
 	public void setPasswordHash(String passwordHash) {
 		this.passwordHash = passwordHash;
 	}
