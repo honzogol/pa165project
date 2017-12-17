@@ -11,5 +11,4 @@ export class AreaDetailComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }

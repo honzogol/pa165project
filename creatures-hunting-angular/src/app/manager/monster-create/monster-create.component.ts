@@ -27,6 +27,14 @@ export class MonsterCreateComponent implements OnInit {
 
   ngOnInit() {
     this.cookie = this.cookieService.check('creatures-token');
+    if (!this.cookie) {
+      this.router.navigate(['/login']);
+      this.dialog.open(ErrorDialogComponent, {
+        width: '600px',
+        data: ["User is not logged in."],
+      });
+      return;
+    }
     this.checkIfCookieExist();
   }
 

@@ -5,6 +5,8 @@ import {Router} from "@angular/router";
 import {Weapon} from "../../entity.module";
 import {CookieService} from "ngx-cookie-service";
 import {ApplicationConfig, CONFIG_TOKEN} from "../../app-config";
+import {ErrorDialogComponent} from "../../error-dialog/error-dialog.component";
+import {MatDialog} from "@angular/material";
 @Component({
   selector: 'app-weapon-create',
   templateUrl: './weapon-create.component.html',
@@ -19,11 +21,19 @@ export class WeaponCreateComponent implements OnInit {
   constructor(private http: HttpClient,
               private cookieService: CookieService,
               private router: Router,
+              private dialog: MatDialog,
               @Inject(CONFIG_TOKEN) private config: ApplicationConfig) {}
 
   ngOnInit() {
     this.cookie = this.cookieService.check('creatures-token');
-    this.checkIfCookieExist();
+    if (!this.cookie) {
+      this.router.navigate(['/login']);
+      this.dialog.open(ErrorDialogComponent, {
+        width: '600px',
+        data: ["User is not logged in."],
+      });
+      return;
+    }
   }
 
   checkIfCookieExist(){

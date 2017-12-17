@@ -1,10 +1,11 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MatTableDataSource} from "@angular/material";
+import {MatDialog, MatTableDataSource} from "@angular/material";
 import { HttpClient } from '@angular/common/http';
 import {User} from "../../entity.module";
 import {Router} from "@angular/router";
 import {CookieService} from "ngx-cookie-service";
 import {ApplicationConfig, CONFIG_TOKEN} from "../../app-config";
+import {ErrorDialogComponent} from "../../error-dialog/error-dialog.component";
 
 @Component({
 	selector: 'app-users',
@@ -22,10 +23,19 @@ export class UsersComponent implements OnInit {
   constructor(private http: HttpClient,
               private cookieService: CookieService,
               private router: Router,
+              private dialog: MatDialog,
               @Inject(CONFIG_TOKEN) private config: ApplicationConfig) { }
 
 	ngOnInit() {
     this.cookie = this.cookieService.check('creatures-token');
+    if (!this.cookie) {
+      this.router.navigate(['/login']);
+      this.dialog.open(ErrorDialogComponent, {
+        width: '600px',
+        data: ["User is not logged in."],
+      });
+      return;
+    }
 	  this.loadUsers();
 	}
 

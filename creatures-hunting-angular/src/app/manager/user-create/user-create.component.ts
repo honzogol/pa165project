@@ -4,6 +4,8 @@ import {Router} from "@angular/router";
 import { HttpClient } from '@angular/common/http';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ApplicationConfig, CONFIG_TOKEN} from "../../app-config";
+import {ErrorDialogComponent} from "../../error-dialog/error-dialog.component";
+import {MatDialog} from "@angular/material";
 
 @Component({
   selector: 'app-user-create',
@@ -23,11 +25,19 @@ export class UserCreateComponent implements OnInit {
               private cookieService: CookieService,
               private router: Router,
               private _formBuilder: FormBuilder,
+              private dialog: MatDialog,
               @Inject(CONFIG_TOKEN) private config: ApplicationConfig) {}
 
   ngOnInit() {
     this.cookie = this.cookieService.check('creatures-token');
-    this.checkIfCookieExist();
+    if (!this.cookie) {
+      this.router.navigate(['/login']);
+      this.dialog.open(ErrorDialogComponent, {
+        width: '600px',
+        data: ["User is not logged in."],
+      });
+      return;
+    }
 
     this.firstFormGroup = this._formBuilder.group({
       firstCtrl: ['', Validators.required]

@@ -4,6 +4,8 @@ import { Monster } from '../../entity.module';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CookieService} from "ngx-cookie-service";
 import {ApplicationConfig, CONFIG_TOKEN} from "../../app-config";
+import {ErrorDialogComponent} from "../../error-dialog/error-dialog.component";
+import {MatDialog} from "@angular/material";
 
 
 @Component({
@@ -24,13 +26,22 @@ export class MonsterDetailComponent implements OnInit {
               private route: ActivatedRoute,
               private cookieService: CookieService,
               private router: Router,
+              private dialog: MatDialog,
               @Inject(CONFIG_TOKEN) private config: ApplicationConfig) {
     this.route.params.subscribe(res => this.monsterId = res.id);
   }
 
   ngOnInit() {
     this.cookie = this.cookieService.check('creatures-token');
-    this.checkIsAdminCookie()
+    if (!this.cookie) {
+      this.router.navigate(['/login']);
+      this.dialog.open(ErrorDialogComponent, {
+        width: '600px',
+        data: ["User is not logged in."],
+      });
+      return;
+    }
+    this.checkIsAdminCookie();
     this.loadData();
   }
 

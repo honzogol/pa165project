@@ -6,6 +6,7 @@ import {MatDialog, MatTableDataSource} from "@angular/material";
 import {CookieService} from "ngx-cookie-service";
 import {AddMonstersComponent} from "../../add-monsters-dialog/add-monsters-dialog.component";
 import {ApplicationConfig, CONFIG_TOKEN} from "../../app-config";
+import {ErrorDialogComponent} from "../../error-dialog/error-dialog.component";
 
 @Component({
   selector: 'app-weapon-detail',
@@ -38,6 +39,14 @@ export class WeaponDetailComponent implements OnInit {
 
   ngOnInit() {
     this.cookie = this.cookieService.check('creatures-token');
+    if (!this.cookie) {
+      this.router.navigate(['/login']);
+      this.dialog.open(ErrorDialogComponent, {
+        width: '600px',
+        data: ["User is not logged in."],
+      });
+      return;
+    }
     this.checkIsAdminCookie();
     this.loadData();
   }
