@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {CookieService} from "ngx-cookie-service";
+import {ApplicationConfig, CONFIG_TOKEN} from "../app-config";
 
 @Component({
   selector: 'app-manager',
@@ -10,7 +11,10 @@ import {CookieService} from "ngx-cookie-service";
 })
 export class ManagerComponent implements OnInit {
 
-  constructor(private http: HttpClient, private cookieService: CookieService, private router: Router) { }
+  constructor(private http: HttpClient,
+              private cookieService: CookieService,
+              private router: Router,
+              @Inject(CONFIG_TOKEN) private config: ApplicationConfig) { }
 
   cookieIsAdmin: boolean = false;
 
@@ -28,7 +32,7 @@ export class ManagerComponent implements OnInit {
   }
 
   logout() {
-    this.http.delete('http://localhost:8080/pa165/rest/auth', {withCredentials: true}).subscribe(
+    this.http.delete(this.config.apiEndpoint + '/pa165/rest/auth', {withCredentials: true}).subscribe(
       data => console.log('Data: ' + data),
       error => console.log('Error: ' + error)
     )

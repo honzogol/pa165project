@@ -54,7 +54,7 @@ public class WeaponController {
      * Create a new Weapon by POST method
      * curl -X POST -i -H "Content-Type: application/json" --data
      * '{"name":"test","type":"OTHER","range":100,"magazineCapacity":10}'
-     * http://localhost:8080/pa165/rest/weapons/create
+     * http://localhost:8080/pa165/rest/auth/weapons/create
      *
      * @param weaponCreateDTO WeaponCreateDTO with required fields for creation
      * @return the created weapon WeaponDTO
@@ -72,7 +72,7 @@ public class WeaponController {
 
         WeaponDTO weaponDTO = weaponFacade.findByName(weaponCreateDTO.getName());
         if (weaponDTO != null){
-            throw new ResourceAlreadyExistingException("Resource is already existing!");
+            throw new ResourceAlreadyExistingException("Weapon with given name is already existing.");
         } else {
             Long id = weaponFacade.createWeapon(weaponCreateDTO);
             return weaponFacade.findById(id);
@@ -81,7 +81,7 @@ public class WeaponController {
 
     /**
      * Delete one weapon by id curl -i -X DELETE
-     * http://localhost:8080/pa165/rest/weapons/delete/1
+     * http://localhost:8080/pa165/rest/auth/weapons/delete/1
      *
      * @param id identifier of weapon
      * @throws ResourceNotFoundException when weapon with given ID wasn't found
@@ -98,7 +98,7 @@ public class WeaponController {
         try{
             weaponFacade.deleteWeapon(id);
         } catch (Exception ex){
-            throw new ResourceNotFoundException("Resource not found");
+            throw new ResourceNotFoundException("Weapon not found.");
         }
     }
 
@@ -109,7 +109,7 @@ public class WeaponController {
      * curl -i -X PUT -H
      * "Content-Type: application/json" --data '{"type": "OTHER",
      * "name": "Name", "range": 100, "magazineCapacity": 10}'
-     * http://localhost:8080/pa165/rest/weapons/update/1
+     * http://localhost:8080/pa165/rest/auth/weapons/update/1
      *
      * @param id identified of the weapon to be updated
      * @param weaponUpdateDTO required fields as specified in WeaponUpdateDTO except id
@@ -137,7 +137,7 @@ public class WeaponController {
         WeaponDTO weaponDTO = weaponFacade.updateWeapon(weaponUpdateDTO);
 
         if (weaponDTO == null){
-            throw new ResourceNotFoundException("Resource not found.");
+            throw new ResourceNotFoundException("Weapon not found.");
         }
 
         return weaponDTO;
@@ -146,7 +146,7 @@ public class WeaponController {
     /**
      * Add appropriate MonsterDTO to weapon.
      *
-     * curl -i -X POST  http://localhost:8080/pa165/rest/weapons/7/addAppropriateMonster?monsterId=1
+     * curl -i -X POST  http://localhost:8080/pa165/rest/auth/weapons/7/addAppropriateMonster?monsterId=1
      *
      * @param id identified of the weapon to be updated
      * @throws InvalidParameterException when the given parameters are invalid
@@ -170,7 +170,7 @@ public class WeaponController {
     /**
      * Remove appropriate MonsterDTO to weapon.
      *
-     * curl -i -X POST  http://localhost:8080/pa165/rest/weapons/7/removeAppropriateMonster?monsterId=1
+     * curl -i -X POST  http://localhost:8080/pa165/rest/auth/weapons/7/removeAppropriateMonster?monsterId=1
      *
      * @param id identified of the weapon to be updated
      * @throws InvalidParameterException when the given parameters are invalid
@@ -190,7 +190,7 @@ public class WeaponController {
 
     /**
      * Get list of Weapons
-     * curl -i -X GET http://localhost:8080/pa165/rest/weapons
+     * curl -i -X GET http://localhost:8080/pa165/rest/auth/weapons
      *
      * @return List<WeaponDTO>
      */
@@ -205,7 +205,7 @@ public class WeaponController {
     /**
      * Gets all weapons with given type by GET method
      * curl -i -X GET
-     * http://localhost:8080/pa165/rest/weapons/filter/type/OTHER
+     * http://localhost:8080/pa165/rest/auth/weapons/filter/type/OTHER
      *
      * @param type WeaponType that will be used for search
      * @return List of WeaponDTOs with given agility
@@ -216,7 +216,7 @@ public class WeaponController {
         log.debug("Rest get all weapons for type ({})", type);
 
         if (type == null){
-            throw new IllegalArgumentException("Invalid parametres given!");
+            throw new IllegalArgumentException("Invalid parameters given.");
         }
 
         return weaponFacade.getAllForType(type);
@@ -224,7 +224,7 @@ public class WeaponController {
 
     /**
      * Get Weapon by identifier id curl -i -X GET
-     * http://localhost:8080/pa165/rest/weapons/1
+     * http://localhost:8080/pa165/rest/auth/weapons/1
      *
      * @param id identifier of weapon
      * @return WeaponDTO
@@ -237,14 +237,14 @@ public class WeaponController {
 
         WeaponDTO weapon = weaponFacade.findById(id);
         if (weapon == null){
-            throw new ResourceNotFoundException("Resource not found");
+            throw new ResourceNotFoundException("Weapon not found.");
         }
         return weapon;
     }
 
     /**
      * Get Weapon by name id curl -i -X GET
-     * http://localhost:8080/pa165/rest/weapons/filter/name/Pistol
+     * http://localhost:8080/pa165/rest/auth/weapons/filter/name/Pistol
      *
      * @param name name of weapon
      * @return WeaponDTO
@@ -257,7 +257,7 @@ public class WeaponController {
 
         WeaponDTO weapon = weaponFacade.findByName(name);
         if (weapon == null){
-            throw new ResourceNotFoundException("Resource not found");
+            throw new ResourceNotFoundException("Weapon not found.");
         }
         return weapon;
     }
@@ -265,7 +265,7 @@ public class WeaponController {
     /**
      * Get most effective weapons
      * curl -i -X GET
-     * http://localhost:8080/pa165/rest/weapons/filter/mostEffectiveWeapon
+     * http://localhost:8080/pa165/rest/auth/weapons/filter/mostEffectiveWeapon
      *
      * @return List of WeaponDTOs that are the most effective
      */

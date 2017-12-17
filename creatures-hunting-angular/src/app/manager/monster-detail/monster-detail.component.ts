@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Monster } from '../../entity.module';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CookieService} from "ngx-cookie-service";
+import {ApplicationConfig, CONFIG_TOKEN} from "../../app-config";
 
 
 @Component({
@@ -19,7 +20,11 @@ export class MonsterDetailComponent implements OnInit {
   cookie: boolean = false;
   isAdmin: boolean = false;
 
-  constructor(private http: HttpClient, private route: ActivatedRoute, private cookieService: CookieService, private router: Router) {
+  constructor(private http: HttpClient,
+              private route: ActivatedRoute,
+              private cookieService: CookieService,
+              private router: Router,
+              @Inject(CONFIG_TOKEN) private config: ApplicationConfig) {
     this.route.params.subscribe(res => this.monsterId = res.id);
   }
 
@@ -39,7 +44,6 @@ export class MonsterDetailComponent implements OnInit {
 
   checkIfCookieExist(){
     if (!this.cookie){
-      alert("You must log in.");
       this.router.navigate(['/login']);
     }
   }
@@ -47,7 +51,7 @@ export class MonsterDetailComponent implements OnInit {
   loadData(){
     this.cookie = this.cookieService.check('creatures-token');
     this.checkIfCookieExist();
-    this.http.get<Monster>('http://localhost:8080/pa165/rest/auth/monsters/' + this.monsterId, {withCredentials: true}).subscribe(
+    this.http.get<Monster>(this.config.apiEndpoint + '/pa165/rest/auth/monsters/' + this.monsterId, {withCredentials: true}).subscribe(
     data => {
       console.log('Monster detail loaded:\n' + data);
       this.monster = data;
@@ -61,7 +65,7 @@ export class MonsterDetailComponent implements OnInit {
     this.checkIfCookieExist();
     var json = {"name":name, "height":height, "weight":weight, "agility":agility};
     console.log(json);
-    this.http.put('http://localhost:8080/pa165/rest/auth/monsters/' + this.monsterId, json, {withCredentials: true}).subscribe(
+    this.http.put(this.config.apiEndpoint + '/pa165/rest/auth/monsters/' + this.monsterId, json, {withCredentials: true}).subscribe(
       data => {
         console.log("Updating monster with name: " + name + ", height: " + height + ", weight: "+ weight + "and agility: " + agility + "was successful.");
         this.loadData();

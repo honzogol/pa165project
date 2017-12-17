@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Area, Monster, Weapon} from "../../entity.module";
 import {MatTableDataSource} from "@angular/material";
 import {CookieService} from "ngx-cookie-service";
 import {Router} from "@angular/router";
 import 'rxjs/add/operator/toPromise';
+import {ApplicationConfig, CONFIG_TOKEN} from "../../app-config";
 
 
 @Component({
@@ -32,9 +33,10 @@ export class HomeComponent implements OnInit {
 
   cookie: boolean = false;
 
-  constructor(private http: HttpClient, private cookieService: CookieService , private router: Router) { }
-
-
+  constructor(private http: HttpClient,
+              private cookieService: CookieService,
+              private router: Router,
+              @Inject(CONFIG_TOKEN) private config: ApplicationConfig) { }
 
   ngOnInit() {
     this.cookie = this.cookieService.check('creatures-token');
@@ -46,14 +48,13 @@ export class HomeComponent implements OnInit {
 
   checkIfCookieExist(){
     if (!this.cookie){
-      alert("You must log in.");
       this.router.navigate(['/login']);
     }
   }
 
   loadMostWidespreadMonsters(){
     this.cookie = this.cookieService.check('creatures-token');
-    this.http.get<Monster[]>('http://localhost:8080/pa165/rest/auth/monsters/filter/mostWidespread', {withCredentials: true}).subscribe(
+    this.http.get<Monster[]>(this.config.apiEndpoint + '/pa165/rest/auth/monsters/filter/mostWidespread', {withCredentials: true}).subscribe(
       data => {
         this.mostWidespreadMonsters = data;
         this.dataMonsters = new MatTableDataSource(this.mostWidespreadMonsters);
@@ -69,7 +70,7 @@ export class HomeComponent implements OnInit {
 
   loadMostDangerousAreas(){
     this.cookie = this.cookieService.check('creatures-token');
-    this.http.get<Area[]>('http://localhost:8080/pa165/rest/auth/areas/filter/mostDangerous', {withCredentials: true}).subscribe(
+    this.http.get<Area[]>(this.config.apiEndpoint + '/pa165/rest/auth/areas/filter/mostDangerous', {withCredentials: true}).subscribe(
       data => {
         this.mostDangerousAreas = data;
         this.dataAreas = new MatTableDataSource(this.mostDangerousAreas);
@@ -85,7 +86,7 @@ export class HomeComponent implements OnInit {
 
   loadMostEffectiveWeapon(){
     this.cookie = this.cookieService.check('creatures-token');
-    this.http.get<Weapon[]>('http://localhost:8080/pa165/rest/auth/weapons/filter/mostEffectiveWeapon', {withCredentials: true}).subscribe(
+    this.http.get<Weapon[]>(this.config.apiEndpoint + '/pa165/rest/auth/weapons/filter/mostEffectiveWeapon', {withCredentials: true}).subscribe(
       data => {
         this.mostEffectiveWeapons = data;
         this.dataWeapons = new MatTableDataSource(this.mostEffectiveWeapons);

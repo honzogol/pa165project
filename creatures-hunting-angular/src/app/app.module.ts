@@ -11,7 +11,7 @@ import { MonstersComponent } from './manager/monsters/monsters.component';
 import { MonsterDetailComponent } from './manager/monster-detail/monster-detail.component';
 import { WeaponsComponent} from './manager/weapons/weapons.component';
 
-import { HttpClientModule } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { LoginComponent } from './login/login.component';
 import { ManagerComponent } from './manager/manager.component';
 import {WeaponDetailComponent} from "./manager/weapon-detail/weapon-detail.component";
@@ -26,6 +26,11 @@ import {AreasComponent} from "./manager/areas/areas.component";
 import {CookieService} from "ngx-cookie-service";
 import {CookieLawModule} from "angular2-cookie-law";
 import { AddMonstersComponent } from './add-monsters-dialog/add-monsters-dialog.component';
+import {MatStepperModule} from "@angular/material";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {CONFIG, CONFIG_TOKEN} from "./app-config";
+import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
+import {ErrorInterceptor} from "./error-interceptor";
 
 
 @NgModule({
@@ -46,7 +51,8 @@ import { AddMonstersComponent } from './add-monsters-dialog/add-monsters-dialog.
     LoginComponent,
     ManagerComponent,
     Error404Component,
-    AddMonstersComponent
+    AddMonstersComponent,
+    ErrorDialogComponent
   ],
   imports: [
     CookieLawModule,
@@ -55,11 +61,25 @@ import { AddMonstersComponent } from './add-monsters-dialog/add-monsters-dialog.
     BrowserAnimationsModule,
     MaterialModule,
     HttpClientModule,
+    MatStepperModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   entryComponents: [
     AddMonstersComponent,
+    ErrorDialogComponent,
   ],
-  providers: [CookieService],
+  providers: [CookieService,
+    {
+      provide: CONFIG_TOKEN,
+      useValue: CONFIG
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
+      multi: true,
+    }
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

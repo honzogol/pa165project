@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Monster, Weapon} from '../../entity.module';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog, MatTableDataSource} from "@angular/material";
 import {CookieService} from "ngx-cookie-service";
 import {AddMonstersComponent} from "../../add-monsters-dialog/add-monsters-dialog.component";
+import {ApplicationConfig, CONFIG_TOKEN} from "../../app-config";
 
 @Component({
   selector: 'app-weapon-detail',
@@ -29,7 +30,8 @@ export class WeaponDetailComponent implements OnInit {
               private route: ActivatedRoute,
               private cookieService: CookieService,
               private router: Router,
-              public dialog: MatDialog) {
+              private dialog: MatDialog,
+              @Inject(CONFIG_TOKEN) private config: ApplicationConfig) {
     this.route.params.subscribe(res => this.weaponId = res.id);
 
   }
@@ -42,7 +44,6 @@ export class WeaponDetailComponent implements OnInit {
 
   checkIfCookieExist(){
     if (!this.cookie){
-      alert("You must log in.");
       this.router.navigate(['/login']);
     }
   }
@@ -56,9 +57,10 @@ export class WeaponDetailComponent implements OnInit {
   }
 
   loadData(){
+    this.showWeapon = false;
     this.cookie = this.cookieService.check('creatures-token');
     this.checkIfCookieExist();
-    this.http.get<Weapon>('http://localhost:8080/pa165/rest/auth/weapons/' + this.weaponId, {withCredentials: true}).subscribe(
+    this.http.get<Weapon>(this.config.apiEndpoint + '/pa165/rest/auth/weapons/' + this.weaponId, {withCredentials: true}).subscribe(
       data => {
         console.log('Weapon detail loaded:\n' + data);
         this.weapon = data;
@@ -66,6 +68,7 @@ export class WeaponDetailComponent implements OnInit {
         this.weaponType = data.type == null ? 'null' : data.type;
         this.appropriateMonsters = data.appropriateMonsters;
         this.dataSource = new MatTableDataSource(this.appropriateMonsters);
+        this.showWeapon = true;
       });
   }
 
@@ -88,7 +91,7 @@ export class WeaponDetailComponent implements OnInit {
   removeAppropriateMonster(monsterId){
     this.cookie = this.cookieService.check('creatures-token');
     this.checkIfCookieExist();
-    this.http.put('http://localhost:8080/pa165/rest/auth/weapons/' + this.weaponId + '/removeAppropriateMonster?monsterId='+ monsterId ,  null, {responseType: 'text', withCredentials: true}).subscribe(
+    this.http.put(this.config.apiEndpoint + '/pa165/rest/auth/weapons/' + this.weaponId + '/removeAppropriateMonster?monsterId='+ monsterId ,  null, {responseType: 'text', withCredentials: true}).subscribe(
       data => {
         console.log("Removing appropriate monster with id: " + monsterId + " to weapon with id: " + this.weaponId + "was successful.");
         this.loadData();
@@ -102,7 +105,7 @@ export class WeaponDetailComponent implements OnInit {
     this.cookie = this.cookieService.check('creatures-token');
     this.checkIfCookieExist();
     var json = {"id":this.weaponId,"name": name,"type":weaponType, "range":range, "magazineCapacity":magazineCapacity};
-    this.http.put('http://localhost:8080/pa165/rest/auth/weapons/update/' + this.weaponId, json, {withCredentials: true}).subscribe(
+    this.http.put(this.config.apiEndpoint + '/pa165/rest/auth/weapons/update/' + this.weaponId, json, {withCredentials: true}).subscribe(
       data => {
         console.log("Updating weapon with name: " + name + ", type: " + weaponType + ", range: "+ range + "and magazine capacity: " + magazineCapacity + "was successful.");
         this.loadData();

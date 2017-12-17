@@ -53,7 +53,7 @@ public class AreaController {
     }
 
     /**
-     * Get list of Areas curl -i -X GET http://localhost:8080/pa165/rest/auth/areas
+     * Get list of Areas curl -i -X GET http://localhost:8080/pa165/rest/auth/auth/areas
      *
      * @return List<AreaDTO>
      */
@@ -65,9 +65,10 @@ public class AreaController {
     }
 
     /**
-     * Create a new Area by POST method curl -X POST -i -H "Content-Type:
+     * Create a new Area by POST method
+     * curl -X POST -i -H "Content-Type:
      * application/json" --data '{"name":"New Area","type":"MOUNTAINS"}'
-     * http://localhost:8080/pa165/rest/areas/create
+     * http://localhost:8080/pa165/rest/auth/areas/create
      *
      * @param area AreaCreateDTO with required fields for creation
      * @return the created area AreaDTO
@@ -84,7 +85,7 @@ public class AreaController {
 
         AreaDTO areaWithSameName = areaFacade.findByName(area.getName());
         if (areaWithSameName != null) {
-            throw new ResourceAlreadyExistingException("Resource is already existing.");
+            throw new ResourceAlreadyExistingException("Area with given name is already existing.");
         } else {
             Long id = areaFacade.createArea(area);
             return areaFacade.findById(id);
@@ -92,8 +93,9 @@ public class AreaController {
     }
 
     /**
-     * Delete one area by id curl -i -X DELETE
-     * http://localhost:8080/pa165/rest/areas/1
+     * Delete one area by id
+     * curl -i -X DELETE
+     * http://localhost:8080/pa165/rest/auth/areas/1
      *
      * @param id identifier of area
      * @throws ResourceNotFoundException when area with given ID wasn't found
@@ -108,7 +110,7 @@ public class AreaController {
         try {
             areaFacade.deleteArea(id);
         } catch (Exception e) {
-            throw new ResourceNotFoundException("Resource not found.");
+            throw new ResourceNotFoundException("Area not found.");
         }
     }
 
@@ -118,7 +120,7 @@ public class AreaController {
      *
      * curl -i -X PUT -H "Content-Type: application/json" --data '{"type":
      * "MOUNTAINS", "name": "Mountains full of Kyle Moms"}'
-     * http://localhost:8080/pa165/rest/areas/1
+     * http://localhost:8080/pa165/rest/auth/areas/1
      *
      * @param areaUpdate required fields as specified in AreaUpdateDTO except id
      * @return the updated AreaDTO
@@ -140,15 +142,16 @@ public class AreaController {
         AreaDTO updatedArea = areaFacade.updateArea(areaUpdate);
 
         if (updatedArea == null) {
-            throw new ResourceNotFoundException("Resource not found.");
+            throw new ResourceNotFoundException("Area not found.");
         }
 
         return updatedArea;
     }
 
     /**
-     * Gets all areas with given type by GET method curl -i -X GET
-     * http://localhost:8080/pa165/rest/areas/filter/type/MOUNTAINS
+     * Gets all areas with given type by GET method
+     * curl -i -X GET
+     * http://localhost:8080/pa165/rest/auth/areas/filter/type/MOUNTAINS
      *
      * @param type type that will be used for search
      * @return List of AreaDTO with given type
@@ -166,9 +169,9 @@ public class AreaController {
     }
 
     /**
-     *
-     * Get Area by identifier id curl -i -X GET
-     * http://localhost:8080/pa165/rest/areas/1
+     * Get Area by identifier id
+     * curl -i -X GET
+     * http://localhost:8080/pa165/rest/auth/areas/1
      *
      * @param id identifier of area
      * @return AreaDTO
@@ -182,16 +185,16 @@ public class AreaController {
         AreaDTO area = areaFacade.findById(id);
 
         if (area == null) {
-            throw new ResourceNotFoundException("Resource not found.");
+            throw new ResourceNotFoundException("Area not found.");
         }
 
         return area;
     }
 
     /**
-     *
-     * Get Area by name id curl -i -X GET
-     * http://localhost:8080/pa165/rest/areas/filter/name/district
+     * Get Area by name id
+     * curl -i -X GET
+     * http://localhost:8080/pa165/rest/auth/areas/filter/name/district
      *
      * @param name name of area
      * @return AreaDTO
@@ -205,16 +208,16 @@ public class AreaController {
         AreaDTO area = areaFacade.findByName(name);
 
         if (area == null) {
-            throw new ResourceNotFoundException("Resource not found.");
+            throw new ResourceNotFoundException("Area not found.");
         }
 
         return area;
     }
 
     /**
-     *
-     * Get most dangerous areas curl -i -X GET
-     * http://localhost:8080/pa165/rest/areas/filter/mostDangerous
+     * Get most dangerous areas
+     * curl -i -X GET
+     * http://localhost:8080/pa165/rest/auth/areas/filter/mostDangerous
      *
      * @return List of AreaDTO which are most dangerous
      */
@@ -227,24 +230,15 @@ public class AreaController {
     }
 
     /**
-     *
      * Add MonsterDTO to area.
      *
-     *
-     *
      * curl -i -X POST -H "Content-Type: application/json"
-     *
-     * http://localhost:8080/pa165/rest/areas/1/addMonsterToArea?id=2
-     *
-     *
+     * http://localhost:8080/pa165/rest/auth/areas/1/addMonsterToArea?id=2
      *
      * @param areaId identifier of the area to be updated
-     *
      * @param id identifier of the area to be added
-     *
      * @throws ResourceNotFoundException when given id does not match any
      * MonsterDTO object
-     *
      */
     @RequestMapping(value = "{areaId}/addMonsterToArea", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 
@@ -252,12 +246,16 @@ public class AreaController {
 
         log.debug("Rest addMonsterToArea with id ({}) to area with id({})", id, areaId);
 
+        AreaDTO areaDTO = areaFacade.findById(areaId);
+
+        if (areaDTO == null) {
+            throw new ResourceNotFoundException("Area with given id does not exist.");
+        }
+
         MonsterDTO monsterDTO = monsterFacade.findById(id);
 
         if (monsterDTO == null) {
-
             throw new ResourceNotFoundException("Monster with this id does not exist.");
-
         }
 
         areaFacade.addMonsterToArea(areaId, monsterDTO.getId());
@@ -265,23 +263,14 @@ public class AreaController {
     }
 
     /**
-     *
      * Remove MonsterDTO from area.
      *
-     *
-     *
      * curl -i -X POST -H "Content-Type: application/json"
-     *
-     * http://localhost:8080/pa165/rest/areas/1/removeMonsterFromArea?id=1
-     *
-     *
+     * http://localhost:8080/pa165/rest/auth/areas/1/removeMonsterFromArea?id=1
      *
      * @param areaId identified of the area to be updated
-     *
      * @param id identifier of the monster to be removed
-     *
      * @throws InvalidParameterException when the given parameters are invalid
-     *
      */
     @RequestMapping(value = "/{areaId}/removeMonsterFromArea", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 
@@ -294,6 +283,5 @@ public class AreaController {
         } catch (Exception e) {
             throw new ResourceNotFoundException("Failed to remove monster from area.");
         }
-
     }
 }

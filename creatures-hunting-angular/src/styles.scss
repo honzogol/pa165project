@@ -4,6 +4,7 @@
 .center {
   margin-left: auto;
   margin-right: auto;
+  display: inline-block;
 }
 
 .attribute {
@@ -28,4 +29,8 @@
   height: 400px;
   overflow-x: auto;
   overflow-y: auto;
+}
+
+.centerWrapper {
+  text-align: center;
 }

@@ -127,7 +127,7 @@ public class WeaponsControllerTest {
     public void debugTest() throws Exception{
         doReturn(Collections.unmodifiableList(this.createWeapons())).when(
                 weaponFacade).getAll();
-        mockMvc.perform(get("/auth/weapons")).andDo(print());
+        mockMvc.perform(get("/pa165/rest/auth/weapons")).andDo(print());
     }
 
     @Test
@@ -138,7 +138,7 @@ public class WeaponsControllerTest {
 
         String json = convertObjectToJsonBytes(weaponCreateDTO);
 
-        mockMvc.perform(post("/auth/weapons/create")
+        mockMvc.perform(post("/pa165/rest/auth/weapons/create")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(json))
                 .andExpect(status().isOk());
@@ -146,7 +146,7 @@ public class WeaponsControllerTest {
 
     @Test
     public void testDeleteExistingWeapon() throws Exception{
-        mockMvc.perform(delete("/auth/weapons/delete/1")).andExpect(status().isOk());
+        mockMvc.perform(delete("/pa165/rest/auth/weapons/delete/1")).andExpect(status().isOk());
 
         verify(weaponFacade, times(1)).deleteWeapon(1L);
     }
@@ -155,7 +155,7 @@ public class WeaponsControllerTest {
     public void testDeleteNonExistingWeapon() throws Exception{
         doThrow(new RuntimeException("The product does not exist")).when(weaponFacade).deleteWeapon(1L);
 
-        mockMvc.perform(delete("/auth/weapons/delete/1")).andExpect(status().isNotFound());
+        mockMvc.perform(delete("/pa165/rest/auth/weapons/delete/1")).andExpect(status().isNotFound());
     }
 
     @Test
@@ -178,7 +178,7 @@ public class WeaponsControllerTest {
 
         String json = convertObjectToJsonBytes(weaponUpdateDTO);
 
-        mockMvc.perform(put("/auth/weapons/update/1")
+        mockMvc.perform(put("/pa165/rest/auth/weapons/update/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(status().isOk())
@@ -191,7 +191,7 @@ public class WeaponsControllerTest {
     @Test
     public void testGetAllWeapons() throws Exception {
         doReturn(Collections.unmodifiableList(this.createWeapons())).when(weaponFacade).getAll();
-        mockMvc.perform(get("/auth/weapons"))
+        mockMvc.perform(get("/pa165/rest/auth/weapons"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.[?(@.id==1)].name").value("Pistol"))
@@ -204,7 +204,7 @@ public class WeaponsControllerTest {
         List<WeaponDTO> weapons = this.createWeapons();
         when(weaponFacade.getAllForType(WeaponType.OTHER)).thenReturn(Arrays.asList(weapons.get(0), weapons.get(1)));
 
-        mockMvc.perform(get("/auth/weapons/filter/type/OTHER"))
+        mockMvc.perform(get("/pa165/rest/auth/weapons/filter/type/OTHER"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[?(@.id==1)].name").value("Pistol"))
                 .andExpect(jsonPath("$.[?(@.id==2)].name").value("Rifle"));
@@ -215,7 +215,7 @@ public class WeaponsControllerTest {
         List<WeaponDTO> weapons = this.createWeapons();
         when(weaponFacade.findById(1L)).thenReturn(weapons.get(0));
 
-        mockMvc.perform(get("/auth/weapons/1"))
+        mockMvc.perform(get("/pa165/rest/auth/weapons/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[?(@.id==1)].name").value("Pistol"));
     }
@@ -225,7 +225,7 @@ public class WeaponsControllerTest {
         List<WeaponDTO> weapons = this.createWeapons();
         when(weaponFacade.findByName("Pistol")).thenReturn(weapons.get(0));
 
-        mockMvc.perform(get("/auth/weapons/filter/name/Pistol"))
+        mockMvc.perform(get("/pa165/rest/auth/weapons/filter/name/Pistol"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[?(@.id==1)].name").value("Pistol"));
     }
@@ -235,7 +235,7 @@ public class WeaponsControllerTest {
         List<WeaponDTO> weapons = this.createWeapons();
 
         when(weaponFacade.getTheMostEffectiveWeapon()).thenReturn(weapons);
-        mockMvc.perform(get("/auth/weapons/filter/mostEffectiveWeapon"))
+        mockMvc.perform(get("/pa165/rest/auth/weapons/filter/mostEffectiveWeapon"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.[?(@.id==1)].name").value("Pistol"))
@@ -258,7 +258,7 @@ public class WeaponsControllerTest {
 
         when(monsterFacade.findById(1L)).thenReturn(monsterDTO);
         when(weaponFacade.findById(1L)).thenReturn(pistol);
-        mockMvc.perform(put("/auth/weapons/1/addAppropriateMonster?monsterId=1"))
+        mockMvc.perform(put("/pa165/rest/auth/weapons/1/addAppropriateMonster?monsterId=1"))
                 .andExpect(status().isOk());
 
         verify(weaponFacade, times(1)).addAppropriateMonster(1L, monsterDTO.getId());
@@ -282,7 +282,7 @@ public class WeaponsControllerTest {
 
         weaponController.addAppropriateMonster(1L, 1L);
 
-        mockMvc.perform(put("/auth/weapons/1/removeAppropriateMonster?monsterId=1"))
+        mockMvc.perform(put("/pa165/rest/auth/weapons/1/removeAppropriateMonster?monsterId=1"))
                 .andExpect(status().isOk());
 
         verify(weaponFacade, times(1)).removeAppropriateMonster(1L, monsterDTO.getId());

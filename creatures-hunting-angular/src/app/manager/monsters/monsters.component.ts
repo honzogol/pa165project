@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { HttpClient } from '@angular/common/http';
 import { Monster } from '../../entity.module';
 import {CookieService} from "ngx-cookie-service";
 import {Router} from "@angular/router";
+import {ApplicationConfig, CONFIG_TOKEN} from "../../app-config";
 
 
 @Component({
@@ -20,7 +21,10 @@ export class MonstersComponent implements OnInit {
   cookie: boolean = false;
   isAdmin: boolean = false;
 
-  constructor(private http: HttpClient, private cookieService: CookieService, private router: Router) {}
+  constructor(private http: HttpClient,
+              private cookieService: CookieService,
+              private router: Router,
+              @Inject(CONFIG_TOKEN) private config: ApplicationConfig) {}
 
   ngOnInit() {
     this.cookie = this.cookieService.check('creatures-token');
@@ -39,7 +43,6 @@ export class MonstersComponent implements OnInit {
 
   checkIfCookieExist(){
     if (!this.cookie){
-      alert("You must log in.");
       this.router.navigate(['/login']);
     }
   }
@@ -47,7 +50,7 @@ export class MonstersComponent implements OnInit {
   loadMonsters() {
     this.cookie = this.cookieService.check('creatures-token');
     this.checkIfCookieExist();
-    this.http.get<Monster[]>('http://localhost:8080/pa165/rest/auth/monsters/', { withCredentials: true }).subscribe(
+    this.http.get<Monster[]>(this.config.apiEndpoint + '/pa165/rest/auth/monsters/', { withCredentials: true }).subscribe(
     data => {
       this.monsters = data;
       this.dataSource = new MatTableDataSource(this.monsters);
@@ -61,7 +64,7 @@ export class MonstersComponent implements OnInit {
   removeMonster(id) {
     this.cookie = this.cookieService.check('creatures-token');
     this.checkIfCookieExist();
-    this.http.delete('http://localhost:8080/pa165/rest/auth/monsters/' + id,  {responseType: 'text', withCredentials: true}).subscribe(
+    this.http.delete(this.config.apiEndpoint + '/pa165/rest/auth/monsters/' + id,  {responseType: 'text', withCredentials: true}).subscribe(
       data => {
         console.log("Removing monster with id: " + id +"was successful.");
         this.loadMonsters();

@@ -2,14 +2,62 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <parent>
-    <artifactId>creatures-hunting-parent</artifactId>
-    <groupId>cz.fi.muni</groupId>
-    <version>1.0-SNAPSHOT</version>
-  </parent>
-  <modelVersion>4.0.0</modelVersion>
-  <packaging>jar</packaging>
-  <artifactId>creatures-hunting-service</artifactId>
-  <name>Service layer</name>
+    <parent>
+        <groupId>cz.fi.muni</groupId>
+        <artifactId>creatures-hunting-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
 
+    <artifactId>creatures-hunting-angular</artifactId>
+
+    <profiles>
+        <profile>
+            <id>build</id>
+            <build>
+                <plugins>
+                        <plugin>
+                      <groupId>com.github.eirslett</groupId>
+                      <artifactId>frontend-maven-plugin</artifactId>
+                      <version>${frontend-plugin.version}</version>
+                      <configuration>
+                          <nodeDownloadRoot>https://nodejs.org/dist/</nodeDownloadRoot>
+                          <nodeVersion>${node.version}</nodeVersion>
+                          <npmVersion>${npm.version}</npmVersion>
+                          <installDirectory>target</installDirectory>
+                      </configuration>
+                      <executions>
+                          <execution>
+                              <id>install node and npm</id>
+                              <goals>
+                                  <goal>install-node-and-npm</goal>
+                              </goals>
+                              <phase>generate-resources</phase>
+                          </execution>
+                          <execution>
+                              <id>npm install</id>
+                              <goals>
+                                  <goal>npm</goal>
+                              </goals>
+                              <configuration>
+                                  <arguments>install</arguments>
+                                  <installDirectory>target</installDirectory>
+                              </configuration>
+                          </execution>
+                          <execution>
+                              <id>angular cli build</id>
+                              <goals>
+                                  <goal>npm</goal>
+                              </goals>
+                              <phase>generate-resources</phase>
+                              <configuration>
+                                  <arguments>run build</arguments>
+                              </configuration>
+                          </execution>
+                      </executions>
+                  </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
