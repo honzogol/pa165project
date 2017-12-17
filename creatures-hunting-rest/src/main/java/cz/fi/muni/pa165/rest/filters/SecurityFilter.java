@@ -16,6 +16,7 @@ import java.io.IOException;
 import cz.fi.muni.pa165.dto.UserDTO;
 import cz.fi.muni.pa165.facade.UserFacade;
 
+import cz.fi.muni.pa165.rest.ApiUris;
 import cz.fi.muni.pa165.rest.security.SecurityUtils;
 
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -23,7 +24,11 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 /**
  * @author Vojtech Sassmann &lt;vojtech.sassmann@gmail.com&gt;
  */
-@WebFilter(urlPatterns = {"/auth/monsters/*", "/auth/areas/*", "/auth/weapons/*", "/auth/users/*"})
+@WebFilter(urlPatterns = {
+		ApiUris.ROOT_AUTH + "/monsters/*",
+		ApiUris.ROOT_AUTH + "/areas/*",
+		ApiUris.ROOT_AUTH + "/weapons/*",
+		ApiUris.ROOT_AUTH + "/users/*"})
 public class SecurityFilter implements Filter {
 
 	@Override

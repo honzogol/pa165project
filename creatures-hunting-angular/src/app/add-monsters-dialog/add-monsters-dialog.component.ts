@@ -4,6 +4,7 @@ import {Monster, Weapon} from "../entity.module";
 import {HttpClient} from "@angular/common/http";
 import {CookieService} from "ngx-cookie-service";
 import {Router} from "@angular/router";
+import {ApplicationConfig, CONFIG_TOKEN} from "../app-config";
 
 @Component({
   selector: 'app-error-dialog',
@@ -24,7 +25,8 @@ export class AddMonstersComponent implements OnInit {
               private cookieService: CookieService,
               private router: Router,
               @Inject(MAT_DIALOG_DATA) public givenWeapon: Weapon,
-              private http: HttpClient,) {
+              @Inject(CONFIG_TOKEN) private config: ApplicationConfig,
+              private http: HttpClient) {
     this.weapon = givenWeapon;
   }
 
@@ -40,7 +42,7 @@ export class AddMonstersComponent implements OnInit {
 
   loadData() {
     this.showMonsters = false;
-    this.http.get<Monster[]>('http://localhost:8080/pa165/rest/auth/monsters/', {withCredentials: true}).subscribe(
+    this.http.get<Monster[]>(this.config.apiEndpoint + '/pa165/rest/auth/monsters/', {withCredentials: true}).subscribe(
       data => {
         this.monsterCandidates = data;
         let alreadyAdded = this.weapon.appropriateMonsters;
@@ -63,7 +65,7 @@ export class AddMonstersComponent implements OnInit {
 
     this.cookie = this.cookieService.check('creatures-token');
     this.checkIfCookieExist();
-    this.http.put('http://localhost:8080/pa165/rest/auth/weapons/' + this.weapon.id + '/addAppropriateMonster?monsterId='+ monsterId ,  null, {responseType: 'text', withCredentials: true}).subscribe(
+    this.http.put(this.config.apiEndpoint + '/pa165/rest/auth/weapons/' + this.weapon.id + '/addAppropriateMonster?monsterId='+ monsterId ,  null, {responseType: 'text', withCredentials: true}).subscribe(
       data => {
         this.filterAddedMonster(monsterId);
         this.loadData();

@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {CookieService} from "ngx-cookie-service";
 import {Router} from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import {User} from "../../entity.module";
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ApplicationConfig, CONFIG_TOKEN} from "../../app-config";
 
 @Component({
   selector: 'app-user-create',
@@ -19,7 +19,11 @@ export class UserCreateComponent implements OnInit {
   fourthFormGroup: FormGroup;
   cookie: boolean = false;
 
-  constructor(private http: HttpClient, private cookieService: CookieService, private router: Router, private _formBuilder: FormBuilder) {}
+  constructor(private http: HttpClient,
+              private cookieService: CookieService,
+              private router: Router,
+              private _formBuilder: FormBuilder,
+              @Inject(CONFIG_TOKEN) private config: ApplicationConfig) {}
 
   ngOnInit() {
     this.cookie = this.cookieService.check('creatures-token');
@@ -52,7 +56,7 @@ export class UserCreateComponent implements OnInit {
     this.checkIfCookieExist();
     var json = {"firstName": firstName,"lastName": lastName, "email": email};
     console.log(json);
-    this.http.post('http://localhost:8080/pa165/rest/auth/users/register?unencryptedPassword=' + password, json, {responseType: 'text', withCredentials: true}).subscribe(
+    this.http.post(this.config.apiEndpoint + '/pa165/rest/auth/users/register?unencryptedPassword=' + password, json, {responseType: 'text', withCredentials: true}).subscribe(
       data => {
         console.log("Creating user with first name: " + firstName + ", last name: " + lastName + ", email: "+ email + "was successful.");
         this.router.navigate(['users']);

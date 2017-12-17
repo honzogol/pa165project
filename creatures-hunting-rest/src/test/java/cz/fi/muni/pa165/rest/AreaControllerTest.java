@@ -119,7 +119,7 @@ public class AreaControllerTest {
     public void debugTest() throws Exception {
         doReturn(Collections.unmodifiableList(this.createAreas())).when(
                 areaFacade).getAllAreas();
-        mockMvc.perform(get("/auth/areas")).andDo(print());
+        mockMvc.perform(get("/pa165/rest/auth/areas")).andDo(print());
     }
 
     @Test
@@ -130,7 +130,7 @@ public class AreaControllerTest {
 
         String json = convertObjectToJsonBytes(areaCreateDTO);
 
-        mockMvc.perform(post("/auth/areas/create")
+        mockMvc.perform(post("/pa165/rest/auth/areas/create")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(json))
                 .andExpect(status().isOk());
@@ -138,7 +138,7 @@ public class AreaControllerTest {
 
     @Test
     public void testDeleteExistingArea() throws Exception {
-        mockMvc.perform(delete("/auth/areas/1")).andExpect(status().isOk());
+        mockMvc.perform(delete("/pa165/rest/auth/areas/1")).andExpect(status().isOk());
 
         verify(areaFacade, times(1)).deleteArea(1L);
     }
@@ -147,7 +147,7 @@ public class AreaControllerTest {
     public void testDeleteNonExistingArea() throws Exception {
         doThrow(new RuntimeException("The product does not exist")).when(areaFacade).deleteArea(1L);
 
-        mockMvc.perform(delete("/auth/areas/delete/1")).andExpect(status().isNotFound());
+        mockMvc.perform(delete("/pa165/rest/auth/areas/delete/1")).andExpect(status().isNotFound());
     }
 
     @Test
@@ -166,7 +166,7 @@ public class AreaControllerTest {
 
         String json = convertObjectToJsonBytes(areaUpdateDTO);
 
-        mockMvc.perform(put("/auth/areas/update")
+        mockMvc.perform(put("/pa165/rest/auth/areas/update")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(status().isOk())
@@ -177,7 +177,7 @@ public class AreaControllerTest {
     @Test
     public void testGetAllAreas() throws Exception {
         doReturn(Collections.unmodifiableList(this.createAreas())).when(areaFacade).getAllAreas();
-        mockMvc.perform(get("/auth/areas"))
+        mockMvc.perform(get("/pa165/rest/auth/areas"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.[?(@.id==1)].name").value("District"))
@@ -190,7 +190,7 @@ public class AreaControllerTest {
         List<AreaDTO> areas = this.createAreas();
         when(areaFacade.getAllForType(AreaType.OTHER)).thenReturn(Arrays.asList(areas.get(1), areas.get(2)));
 
-        mockMvc.perform(get("/auth/areas/filter/type/OTHER"))
+        mockMvc.perform(get("/pa165/rest/auth/areas/filter/type/OTHER"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[?(@.id==2)].name").value("Mountains"))
                 .andExpect(jsonPath("$.[?(@.id==3)].name").value("Desert"));
@@ -201,7 +201,7 @@ public class AreaControllerTest {
         List<AreaDTO> areas = this.createAreas();
         when(areaFacade.findById(1L)).thenReturn(areas.get(0));
 
-        mockMvc.perform(get("/auth/areas/1"))
+        mockMvc.perform(get("/pa165/rest/auth/areas/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[?(@.id==1)].name").value("District"));
     }
@@ -211,7 +211,7 @@ public class AreaControllerTest {
         List<AreaDTO> areas = this.createAreas();
         when(areaFacade.findByName("District")).thenReturn(areas.get(0));
 
-        mockMvc.perform(get("/auth/areas/filter/name/District"))
+        mockMvc.perform(get("/pa165/rest/auth/areas/filter/name/District"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[?(@.id==1)].name").value("District"));
     }
@@ -222,7 +222,7 @@ public class AreaControllerTest {
 
         when(areaFacade.getTheMostDangerousAreas()).thenReturn(areas);
 
-        mockMvc.perform(get("/auth/areas/filter/mostDangerous"))
+        mockMvc.perform(get("/pa165/rest/auth/areas/filter/mostDangerous"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.[?(@.id==1)].name").value("District"))
@@ -242,7 +242,7 @@ public class AreaControllerTest {
 
         when(monsterFacade.findById(1L)).thenReturn(monsterDTO);
 
-        mockMvc.perform(post("/auth/areas/1/addMonsterToArea?id=1")
+        mockMvc.perform(post("/pa165/rest/auth/areas/1/addMonsterToArea?id=1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(json))
                 .andExpect(status().isOk());
@@ -265,7 +265,7 @@ public class AreaControllerTest {
 
         areaController.addMonsterToArea(1L, monsterDTO.getId());
 
-        mockMvc.perform(post("/auth/areas/1/removeMonsterFromArea?id=1")
+        mockMvc.perform(post("/pa165/rest/auth/areas/1/removeMonsterFromArea?id=1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(json))
                 .andExpect(status().isOk());

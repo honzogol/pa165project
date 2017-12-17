@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {CookieService} from "ngx-cookie-service";
+import {ApplicationConfig, CONFIG_TOKEN} from "../../app-config";
 
 @Component({
   selector: 'app-monster-create',
@@ -12,7 +13,12 @@ export class MonsterCreateComponent implements OnInit {
 
   cookie: boolean = false;
 
-  constructor(private http: HttpClient, private cookieService: CookieService, private router: Router) {}
+  agility: string;
+
+  constructor(private http: HttpClient,
+              private cookieService: CookieService,
+              private router: Router,
+              @Inject(CONFIG_TOKEN) private config: ApplicationConfig) {}
 
   ngOnInit() {
     this.cookie = this.cookieService.check('creatures-token');
@@ -30,7 +36,7 @@ export class MonsterCreateComponent implements OnInit {
     this.cookie = this.cookieService.check('creatures-token');
     this.checkIfCookieExist();
     var json = {"name":name, "height":height, "weight":weight, "agility":agility};
-    this.http.post('http://localhost:8080/pa165/rest/auth/monsters/create', json, {withCredentials: true}).subscribe(
+    this.http.post(this.config.apiEndpoint + '/pa165/rest/auth/monsters/create', json, {withCredentials: true}).subscribe(
       data => {
         console.log("Creating monster with name: " + name + ", height: " + height + ", weight: "+ weight + "and agility: " + agility + "was successful.");
         this.router.navigate(['monsters']);

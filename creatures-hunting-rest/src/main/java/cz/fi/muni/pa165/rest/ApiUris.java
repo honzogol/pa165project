@@ -6,7 +6,8 @@ package cz.fi.muni.pa165.rest;
  * @author Jan Gol <gol.honza@gmail.com>
  */
 public class ApiUris {
-	public static final String ROOT_AUTH = "/auth";
+	public static final String REST_ROOT = "/pa165/rest";
+	public static final String ROOT_AUTH = REST_ROOT + "/auth";
 	public static final String ROOT_URI_MONSTERS = ROOT_AUTH + "/monsters";
 	public static final String ROOT_URI_AREAS = ROOT_AUTH + "/areas";
 	public static final String ROOT_URI_WEAPONS = ROOT_AUTH + "/weapons";

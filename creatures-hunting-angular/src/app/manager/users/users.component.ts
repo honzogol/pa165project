@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {MatTableDataSource} from "@angular/material";
 import { HttpClient } from '@angular/common/http';
 import {User} from "../../entity.module";
 import {Router} from "@angular/router";
 import {CookieService} from "ngx-cookie-service";
+import {ApplicationConfig, CONFIG_TOKEN} from "../../app-config";
 
 @Component({
 	selector: 'app-users',
@@ -18,7 +19,10 @@ export class UsersComponent implements OnInit {
   dataSource: MatTableDataSource<User>;
   cookie: boolean = false;
 
-  constructor(private http: HttpClient, private cookieService: CookieService, private router: Router) { }
+  constructor(private http: HttpClient,
+              private cookieService: CookieService,
+              private router: Router,
+              @Inject(CONFIG_TOKEN) private config: ApplicationConfig) { }
 
 	ngOnInit() {
     this.cookie = this.cookieService.check('creatures-token');
@@ -35,7 +39,7 @@ export class UsersComponent implements OnInit {
   loadUsers() {
     this.cookie = this.cookieService.check('creatures-token');
     this.checkIfCookieExist();
-    this.http.get<User[]>('http://localhost:8080/pa165/rest/auth/users/', { withCredentials: true }).subscribe(
+    this.http.get<User[]>(this.config.apiEndpoint + '/pa165/rest/auth/users/', { withCredentials: true }).subscribe(
       data => {
         this.users = data;
         this.dataSource = new MatTableDataSource(this.users);
@@ -50,7 +54,7 @@ export class UsersComponent implements OnInit {
   deleteUser(id) {
     this.cookie = this.cookieService.check('creatures-token');
     this.checkIfCookieExist();
-    this.http.delete('http://localhost:8080/pa165/rest/auth/users/' + id,  {responseType: 'text', withCredentials: true}).subscribe(
+    this.http.delete(this.config.apiEndpoint + '/pa165/rest/auth/users/' + id,  {responseType: 'text', withCredentials: true}).subscribe(
       data => {
         console.log("Deleting user with id: " + id +"was successful.");
         this.loadUsers();
@@ -64,7 +68,7 @@ export class UsersComponent implements OnInit {
   setAdmin(id) {
     this.cookie = this.cookieService.check('creatures-token');
     this.checkIfCookieExist();
-    this.http.put('http://localhost:8080/pa165/rest/auth/users/setAdmin?id=' + id,  null,{responseType: 'text', withCredentials: true}).subscribe(
+    this.http.put(this.config.apiEndpoint + '/pa165/rest/auth/users/setAdmin?id=' + id,  null,{responseType: 'text', withCredentials: true}).subscribe(
       data => {
         console.log("Setting user with id: " + id +" as admin was successful.");
         this.loadUsers();
@@ -78,7 +82,7 @@ export class UsersComponent implements OnInit {
   removeAdmin(id) {
     this.cookie = this.cookieService.check('creatures-token');
     this.checkIfCookieExist();
-    this.http.put('http://localhost:8080/pa165/rest/auth/users/removeAdmin?id=' + id,  null,{responseType: 'text', withCredentials: true}).subscribe(
+    this.http.put(this.config.apiEndpoint + '/pa165/rest/auth/users/removeAdmin?id=' + id,  null,{responseType: 'text', withCredentials: true}).subscribe(
       data => {
         console.log("Setting user with id: " + id +" as regular user was successful.");
         this.loadUsers();
@@ -92,7 +96,7 @@ export class UsersComponent implements OnInit {
   isAdmin(id) {
     this.cookie = this.cookieService.check('creatures-token');
     this.checkIfCookieExist();
-    this.http.get('http://localhost:8080/pa165/rest/auth/users/isAdmin?id=' + id,  {responseType: 'text', withCredentials: true}).subscribe(
+    this.http.get(this.config.apiEndpoint + '/pa165/rest/auth/users/isAdmin?id=' + id,  {responseType: 'text', withCredentials: true}).subscribe(
       data => {
         this.loadUsers();
       }
@@ -108,8 +112,4 @@ export class UsersComponent implements OnInit {
       this.setAdmin(id);
     }
   }
-
-
-
-
 }

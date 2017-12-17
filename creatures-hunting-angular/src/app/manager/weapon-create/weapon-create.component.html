@@ -6,7 +6,7 @@
   </div>
   <div>
     <mat-form-field>
-      <mat-select placeholder="Type" [(value)]="weaponType">
+      <mat-select placeholder="Type" [(value)]="type">
         <mat-option value="PISTOL">Pistol</mat-option>
         <mat-option value="RIFLE">Rifle</mat-option>
         <mat-option value="SHOTGUN">Shotgun</mat-option>
@@ -28,7 +28,7 @@
   </div>
 
   <button mat-raised-button color="primary" routerLink="/weapons">Back</button>
-  <button mat-raised-button color="primary" (click)="createWeapon(name.value, weaponType, range.value,magazineCapacity.value)">Create</button>
+  <button mat-raised-button color="primary" (click)="createWeapon(name.value, type, range.value,magazineCapacity.value)">Create</button>
 
 
 </mat-card>

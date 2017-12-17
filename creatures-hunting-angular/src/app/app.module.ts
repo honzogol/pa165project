@@ -28,6 +28,7 @@ import {CookieLawModule} from "angular2-cookie-law";
 import { AddMonstersComponent } from './add-monsters-dialog/add-monsters-dialog.component';
 import {MatStepperModule} from "@angular/material";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {CONFIG, CONFIG_TOKEN} from "./app-config";
 
 
 @NgModule({
@@ -64,7 +65,12 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
   entryComponents: [
     AddMonstersComponent,
   ],
-  providers: [CookieService],
+  providers: [CookieService,
+    {
+      provide: CONFIG_TOKEN,
+      useValue: CONFIG
+    }
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
