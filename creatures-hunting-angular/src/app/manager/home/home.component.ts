@@ -1,11 +1,12 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Area, Monster, Weapon} from "../../entity.module";
-import {MatTableDataSource} from "@angular/material";
+import {MatDialog, MatTableDataSource} from "@angular/material";
 import {CookieService} from "ngx-cookie-service";
 import {Router} from "@angular/router";
 import 'rxjs/add/operator/toPromise';
 import {ApplicationConfig, CONFIG_TOKEN} from "../../app-config";
+import {ErrorDialogComponent} from "../../error-dialog/error-dialog.component";
 
 
 @Component({
@@ -36,20 +37,22 @@ export class HomeComponent implements OnInit {
   constructor(private http: HttpClient,
               private cookieService: CookieService,
               private router: Router,
+              private dialog: MatDialog,
               @Inject(CONFIG_TOKEN) private config: ApplicationConfig) { }
 
   ngOnInit() {
     this.cookie = this.cookieService.check('creatures-token');
-    this.checkIfCookieExist();
+    if (!this.cookie) {
+      this.router.navigate(['/login']);
+      this.dialog.open(ErrorDialogComponent, {
+        width: '600px',
+        data: ["User is not logged in."],
+      });
+      return;
+    }
     this.loadMostDangerousAreas();
     this.loadMostEffectiveWeapon();
     this.loadMostWidespreadMonsters();
-  }
-
-  checkIfCookieExist(){
-    if (!this.cookie){
-      this.router.navigate(['/login']);
-    }
   }
 
   loadMostWidespreadMonsters(){

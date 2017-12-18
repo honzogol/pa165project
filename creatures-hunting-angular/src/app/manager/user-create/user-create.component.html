@@ -68,18 +68,7 @@
         </mat-error>
       </div>
       <button mat-raised-button color="primary" matStepperPrevious class="previousButtons">Back</button>
-      <button mat-raised-button color="primary" matStepperNext>Next</button>
-    </form>
-  </mat-step>
-  <mat-step>
-    <ng-template matStepLabel>Done</ng-template>
-    <div class="done">
-      Confirm to create new user
-    </div>
-    <div class="buttons">
-      <button mat-raised-button color="primary" routerLink="/users">Cancel</button>
-      <button mat-raised-button color="primary" matStepperPrevious>Back</button>
       <button mat-raised-button color="primary" (click)="createUser(firstName.value, lastName.value, email.value, password.value)">Create</button>
-    </div>
+    </form>
   </mat-step>
 </mat-horizontal-stepper>
